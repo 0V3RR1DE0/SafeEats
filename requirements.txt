@@ -1,0 +1,12 @@
+certifi
+chardet
+idna
+numpy
+opencv-python
+Pillow
+pytesseract
+python-dateutil
+pyzbar
+requests
+urllib3
+Kivy
