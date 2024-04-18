@@ -334,33 +334,37 @@ class FoodScannerApp(App):
 
     def show_ingredients(self, ingredients_list):
         self.ingredients_popup = Popup(title='Ingredients', size_hint=(0.8, 0.6))
-        
-        self.ingredients_layout = BoxLayout(orientation='vertical')
-        
-        self.ingredients_label = Label(text='Ingredients:')
-        self.ingredients_list = ScrollView()
-        
-        self.ingredients_grid = GridLayout(cols=1, spacing=10, size_hint_y=None)
+    
+        self.ingredients_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+    
+        self.ingredients_label = Label(text='Ingredients:', font_size='20sp', size_hint_y=None, height=40)
+        self.ingredients_list = ScrollView(do_scroll_x=False)
+    
+        self.ingredients_grid = GridLayout(cols=1, spacing=15, size_hint_y=None)
         self.ingredients_grid.bind(minimum_height=self.ingredients_grid.setter('height'))
-        
+    
         for ingredient in ingredients_list:
-            label_text = f"{ingredient['text']}"
+            label_text = f"[b]{ingredient['text']}[/b]"
             if ingredient['vegan'] != 'Unknown':
                 label_text += f"\nVegan: {ingredient['vegan']}"
             if ingredient['vegetarian'] != 'Unknown':
                 label_text += f"\nVegetarian: {ingredient['vegetarian']}"
             if ingredient['from_palm_oil'] != 'No':
                 label_text += f"\nFrom Palm Oil: {ingredient['from_palm_oil']}"
-            btn = Button(text=label_text, size_hint_y=None, height=100, markup=True)
+            btn = Button(text=label_text, size_hint_y=None, height=190, width=240, markup=True, halign='left', valign='middle')
+            btn.text_size = btn.size
             self.ingredients_grid.add_widget(btn)
-        
+    
         self.ingredients_list.add_widget(self.ingredients_grid)
-        
+    
         self.ingredients_layout.add_widget(self.ingredients_label)
         self.ingredients_layout.add_widget(self.ingredients_list)
-        
+    
         self.ingredients_popup.content = self.ingredients_layout
         self.ingredients_popup.open()
+
+
+
 
 if __name__ == '__main__':
     FoodScannerApp().run()
