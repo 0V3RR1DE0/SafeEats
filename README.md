@@ -81,14 +81,16 @@ If the barcode cannot be scanned:
     - Save the updated settings.
 
 ## Upcoming Features
-- **User Profile**: Allow users to create and manage profiles with personalized food restrictions.
-- **Product Rating**: Implement a rating system for products based on user reviews.
-- **History**: Maintain a history of scanned products for easier reference.
+- [ ] **User Profile**: Allow users to create and manage profiles with personalized food restrictions.
+- [ ] **Translations**: Translations for every language.
+- [ ] **History**: Maintain a history of scanned products for easier reference.
 
 ## Fixes Needed
-- Improve barcode scanning accuracy.
-- Enhance user interface for better user experience.
-- Optimize code for faster product information retrieval.
+- [ ] Improve barcode scanning accuracy.
+- [ ] Enhance user interface for better user experience.
+- [ ] Optimize code for faster product information retrieval.
+- [ ] UI Spacing.
+- [ ] Popup box color flagging
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
