@@ -34,15 +34,12 @@ SafeEats is a mobile application designed to help users identify and manage food
 
 ### User Settings
 - **Food Restrictions**: Users can customize their food restrictions by adding, editing, or deleting specific ingredients or allergens.
-
 ## Installation
 
 ### Prerequisites
-- Python 3.12 or newer
-- OpenCV
-- Kivy
-- Pyzbar
-- Pytesseract
+- Flutter SDK
+- Dart SDK
+- Android Studio / Xcode (for iOS development)
 
 ### Installation Steps
 1. Clone the repository:
@@ -53,20 +50,21 @@ SafeEats is a mobile application designed to help users identify and manage food
     ```bash
     cd SafeEats
     ```
-3. Install the required packages:
+3. Run the following command to fetch dependencies:
     ```bash
-    pip install -r requirements.txt
+    flutter pub get
     ```
 
 ## Usage
 
-1. Run the application:
+1. Make sure you have a device connected or an emulator running.
+2. Run the application:
     ```bash
-    python main.py
+    flutter run
     ```
-2. Allow the app to access the device's camera.
-3. Point the camera at the barcode on the food product.
-4. The app will display detailed information about the product, including any potential food restrictions based on the user's settings.
+3. Allow the app to access the device's camera.
+4. Point the camera at the barcode on the food product.
+5. The app will display detailed information about the product, including any potential food restrictions based on the user's settings.
 
 ### Manual Entry
 If the barcode cannot be scanned:
@@ -80,18 +78,17 @@ If the barcode cannot be scanned:
     - Add new food restrictions.
     - Save the updated settings.
 
+## Download
+
+- [Executable (Windows)](link)
+- [APK (Android)](link)
+- [App (Linux)](link)
+- *iOS support coming soon*
+
 ## Upcoming Features
 - [ ] **User Profile**: Allow users to create and manage profiles with personalized food restrictions.
 - [ ] **Translations**: Translations for every language.
 - [ ] **History**: Maintain a history of scanned products for easier reference.
 
-## Fixes Needed
-- [ ] Improve barcode scanning accuracy.
-- [ ] Enhance user interface for better user experience.
-- [ ] Optimize code for faster product information retrieval.
-- [ ] UI Spacing.
-- [ ] Popup box color flagging
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
