@@ -44,7 +44,7 @@ SafeEats is a mobile application designed to help users identify and manage food
 ### Installation Steps
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/SafeEats.git
+    git clone https://github.com/0V3RR1DE0/SafeEats.git
     ```
 2. Navigate to the project directory:
     ```bash
