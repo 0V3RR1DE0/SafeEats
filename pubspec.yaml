@@ -1,0 +1,34 @@
+name: safeeats
+description: A food scanner app to help with food restrictions.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  qr_code_scanner: ^0.4.0
+  http: ^0.13.4
+  provider: ^6.0.0
+  shared_preferences: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/app_icon.png
+
+windows:
+  icon: assets/images/app_icon.png
+
+linux:
+  icon: assets/images/app_icon.png
+
+android:
+  icon: assets/images/app_icon.png
+
+ios:
+  icon: assets/images/app_icon.png
+
+macos:
+  icon: assets/images/app_icon.png
