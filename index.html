@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeEats</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="images/app_icon.png" alt="SafeEats Logo" class="logo">
+        <h1>SafeEats</h1>
+        <p>A food restriction scanner app</p>
+    </header>
+
+    <section id="description">
+        <h2>Description</h2>
+        <p>SafeEats is a mobile application designed to help users identify and manage food restrictions by scanning barcodes on food products. The app provides detailed information about the product, including its name, brands, ingredients, and potential allergens. Users can also manually enter EAN codes to fetch product details.</p>
+    </section>
+
+    <section id="features">
+        <h2>Features</h2>
+        <ul>
+            <li><strong>Barcode Scanning</strong>
+                <ul>
+                    <li>Automated Scanning: The app uses the device's camera to scan barcodes on food products.</li>
+                    <li>Manual Entry: Users can manually enter EAN codes if the barcode cannot be scanned.</li>
+                </ul>
+            </li>
+            <li><strong>Product Information</strong>
+                <ul>
+                    <li>Product Name: Displays the name of the food product.</li>
+                    <li>Brands: Shows the brand(s) of the food product.</li>
+                    <li>Ingredients: Lists the ingredients of the food product.</li>
+                    <li>Allergens: Highlights any potential allergens present in the food product.</li>
+                </ul>
+            </li>
+            <li><strong>User Settings</strong>
+                <ul>
+                    <li>Food Restrictions: Users can customize their food restrictions by adding, editing, or deleting specific ingredients or allergens.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section id="installation">
+        <h2>Installation</h2>
+        <p><strong>Prerequisites:</strong></p>
+        <ul>
+            <li>Flutter SDK</li>
+            <li>Dart SDK</li>
+            <li>Android Studio / Xcode (for iOS development)</li>
+        </ul>
+        <p><strong>Installation Steps:</strong></p>
+        <ol>
+            <li>Clone the repository:
+                <pre><code>git clone https://github.com/0V3RR1DE0/SafeEats.git</code></pre>
+            </li>
+            <li>Navigate to the project directory:
+                <pre><code>cd SafeEats</code></pre>
+            </li>
+            <li>Run the following command to fetch dependencies:
+                <pre><code>flutter pub get</code></pre>
+            </li>
+        </ol>
+    </section>
+
+    <section id="usage">
+        <h2>Usage</h2>
+        <ol>
+            <li>Make sure you have a device connected or an emulator running.</li>
+            <li>Run the application:
+                <pre><code>flutter run</code></pre>
+            </li>
+            <li>Allow the app to access the device's camera.</li>
+            <li>Point the camera at the barcode on the food product.</li>
+            <li>The app will display detailed information about the product, including any potential food restrictions based on the user's settings.</li>
+        </ol>
+        <h3>Manual Entry [Not Operational]</h3>
+        <ol>
+            <li>Enter the EAN code manually in the provided input field.</li>
+            <li>Follow the same steps as above to fetch and display product information.</li>
+        </ol>
+        <h3>Manage Restrictions</h3>
+        <ol>
+            <li>Click on the <strong>Manage Restrictions</strong> button to access the user settings.</li>
+            <li>Here, you can:
+                <ul>
+                    <li>View and edit existing food restrictions.</li>
+                    <li>Add new food restrictions.</li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <section id="download">
+        <h2>Download</h2>
+        <ul>
+            <li><a href="link">Executable (Windows)</a></li>
+            <li><a href="link">APK (Android)</a></li>
+            <li><a href="link">App (Linux)</a></li>
+            <li>*iOS support coming soon*</li>
+        </ul>
+    </section>
+
+    <section id="upcoming-features">
+        <h2>Upcoming Features</h2>
+        <ul>
+            <li>User Profile: Allow users to create and manage profiles with personalized food restrictions.</li>
+            <li>Translations: Translations for every language.</li>
+            <li>History: Maintain a history of scanned products for easier reference.</li>
+        </ul>
+    </section>
+
+    <section id="contributing">
+        <h2>Contributing</h2>
+        <p>Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.</p>
+    </section>
+
+    <footer>
+        <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+        <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="CC BY-NC-SA 4.0">
+    </footer>
+</body>
+</html>
