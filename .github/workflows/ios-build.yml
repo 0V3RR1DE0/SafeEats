@@ -1,0 +1,86 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Analyze code
+      run: flutter analyze
+      
+    - name: Run tests
+      run: flutter test
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Install CocoaPods
+      run: |
+        cd ios
+        pod install
+        
+    - name: Build iOS (Debug)
+      run: |
+        flutter build ios --debug --no-codesign
+        
+    - name: Build iOS (Release - unsigned)
+      run: |
+        flutter build ios --release --no-codesign
+        
+    - name: Archive iOS app
+      run: |
+        cd ios
+        xcodebuild -workspace Runner.xcworkspace \
+                   -scheme Runner \
+                   -configuration Release \
+                   -destination generic/platform=iOS \
+                   -archivePath build/Runner.xcarchive \
+                   archive CODE_SIGNING_ALLOWED=NO
+                   
+    - name: Upload iOS build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build-${{ github.run_number }}
+        path: |
+          build/ios/iphoneos/Runner.app
+          ios/build/Runner.xcarchive
+        retention-days: 30
+        
+    - name: Upload build summary
+      run: |
+        echo "## iOS Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Flutter dependencies installed" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Code analysis passed" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Tests passed" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ iOS debug build completed" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ iOS release build completed" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ iOS archive created" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- iOS app bundle available in artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- Xcode archive available for distribution" >> $GITHUB_STEP_SUMMARY

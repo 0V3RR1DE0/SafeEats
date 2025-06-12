@@ -1,0 +1,2 @@
+F:/Dev/Android/safeeats/android/app/.cxx/Debug/t1p1am58/x86_64/CMakeFiles/edit_cache.dir
+F:/Dev/Android/safeeats/android/app/.cxx/Debug/t1p1am58/x86_64/CMakeFiles/rebuild_cache.dir

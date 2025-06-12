@@ -1,0 +1,250 @@
+name: Multi-Platform Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    name: Code Analysis & Tests
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Analyze code
+      run: flutter analyze
+      
+    - name: Run tests
+      run: flutter test
+
+  build-android:
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+    name: Build Android APKs
+    
+    strategy:
+      matrix:
+        build-type: [debug, release]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Build Universal APK (${{ matrix.build-type }})
+      run: |
+        if [ "${{ matrix.build-type }}" = "release" ]; then
+          flutter build apk --release
+        else
+          flutter build apk --debug
+        fi
+        
+    - name: Build Architecture-specific APKs (${{ matrix.build-type }})
+      run: |
+        if [ "${{ matrix.build-type }}" = "release" ]; then
+          flutter build apk --release --split-per-abi
+        else
+          flutter build apk --debug --split-per-abi
+        fi
+        
+    - name: Rename APK files
+      run: |
+        cd build/app/outputs/flutter-apk/
+        
+        # Rename universal APK
+        if [ "${{ matrix.build-type }}" = "release" ]; then
+          mv app-release.apk safeeats-universal-release.apk
+          # Rename architecture-specific APKs
+          [ -f app-arm64-v8a-release.apk ] && mv app-arm64-v8a-release.apk safeeats-arm64-v8a-release.apk
+          [ -f app-armeabi-v7a-release.apk ] && mv app-armeabi-v7a-release.apk safeeats-armeabi-v7a-release.apk
+          [ -f app-x86_64-release.apk ] && mv app-x86_64-release.apk safeeats-x86_64-release.apk
+        else
+          mv app-debug.apk safeeats-universal-debug.apk
+          # Rename architecture-specific APKs
+          [ -f app-arm64-v8a-debug.apk ] && mv app-arm64-v8a-debug.apk safeeats-arm64-v8a-debug.apk
+          [ -f app-armeabi-v7a-debug.apk ] && mv app-armeabi-v7a-debug.apk safeeats-armeabi-v7a-debug.apk
+          [ -f app-x86_64-debug.apk ] && mv app-x86_64-debug.apk safeeats-x86_64-debug.apk
+        fi
+        
+    - name: Upload Android APKs
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-apks-${{ matrix.build-type }}-${{ github.run_number }}
+        path: |
+          build/app/outputs/flutter-apk/*.apk
+        retention-days: 30
+
+  build-android-bundle:
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+    name: Build Android App Bundle
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Build Android App Bundle
+      run: flutter build appbundle --release
+      
+    - name: Rename AAB file
+      run: |
+        cd build/app/outputs/bundle/release/
+        mv app-release.aab safeeats-release.aab
+        
+    - name: Upload Android App Bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-bundle-${{ github.run_number }}
+        path: |
+          build/app/outputs/bundle/release/*.aab
+        retention-days: 30
+
+  build-ios:
+    needs: analyze-and-test
+    runs-on: macos-latest
+    name: Build iOS
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Install CocoaPods
+      run: |
+        cd ios
+        pod install
+        
+    - name: Build iOS (Debug)
+      run: |
+        flutter build ios --debug --no-codesign
+        
+    - name: Build iOS (Release - unsigned)
+      run: |
+        flutter build ios --release --no-codesign
+        
+    - name: Archive iOS app
+      run: |
+        cd ios
+        xcodebuild -workspace Runner.xcworkspace \
+                   -scheme Runner \
+                   -configuration Release \
+                   -destination generic/platform=iOS \
+                   -archivePath build/Runner.xcarchive \
+                   archive CODE_SIGNING_ALLOWED=NO
+                   
+    - name: Upload iOS build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build-${{ github.run_number }}
+        path: |
+          build/ios/iphoneos/Runner.app
+          ios/build/Runner.xcarchive
+        retention-days: 30
+
+  build-summary:
+    needs: [build-android, build-android-bundle, build-ios]
+    runs-on: ubuntu-latest
+    name: Build Summary
+    if: always()
+    
+    steps:
+    - name: Generate build summary
+      run: |
+        echo "## 🚀 SafeEats Multi-Platform Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ✅ Completed Builds" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "#### 🤖 Android Builds" >> $GITHUB_STEP_SUMMARY
+        echo "- **Universal APK (Debug)** - Compatible with all Android devices" >> $GITHUB_STEP_SUMMARY
+        echo "- **Universal APK (Release)** - Optimized for production" >> $GITHUB_STEP_SUMMARY
+        echo "- **ARM64-v8a APK** - Modern 64-bit ARM devices (most common)" >> $GITHUB_STEP_SUMMARY
+        echo "- **ARMv7a APK** - Older 32-bit ARM devices" >> $GITHUB_STEP_SUMMARY
+        echo "- **x86_64 APK** - Intel/AMD 64-bit devices (emulators, some tablets)" >> $GITHUB_STEP_SUMMARY
+        echo "- **App Bundle (AAB)** - For Google Play Store distribution" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "#### 🍎 iOS Builds" >> $GITHUB_STEP_SUMMARY
+        echo "- **iOS Debug Build** - For development and testing" >> $GITHUB_STEP_SUMMARY
+        echo "- **iOS Release Build** - Optimized for production" >> $GITHUB_STEP_SUMMARY
+        echo "- **Xcode Archive** - Ready for App Store distribution" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📦 Available Artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "All build artifacts are available for download from the Actions tab." >> $GITHUB_STEP_SUMMARY
+        echo "Artifacts are retained for 30 days." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🔧 Build Information" >> $GITHUB_STEP_SUMMARY
+        echo "- **Flutter Version**: 3.27.0" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY

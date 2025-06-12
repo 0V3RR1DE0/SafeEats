@@ -153,7 +153,7 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 
 For support, feature requests, or bug reports:
 - Create an issue on GitHub
-- Email: support@safeeats.com (Coming soon)
+- Email: support@netique.lol (Coming soon)
 - Visit: [eats.netique.lol](https://eats.netique.lol)
 
 ## Acknowledgments

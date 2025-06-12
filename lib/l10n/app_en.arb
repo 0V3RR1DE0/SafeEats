@@ -1,0 +1,429 @@
+{
+    "appTitle": "SafeEats",
+    "@appTitle": {
+      "description": "The title of the application"
+    },
+    "scan": "Scan",
+    "@scan": {
+      "description": "Label for scan tab"
+    },
+    "profiles": "Profiles",
+    "@profiles": {
+      "description": "Label for profiles tab"
+    },
+    "settings": "Settings",
+    "@settings": {
+      "description": "Label for settings tab"
+    },
+    "noProfilesYet": "No profiles yet",
+    "@noProfilesYet": {
+      "description": "Message shown when no profiles exist"
+    },
+    "addProfileToStart": "Add a profile to get started",
+    "@addProfileToStart": {
+      "description": "Instruction to add a profile"
+    },
+    "addProfile": "Add Profile",
+    "@addProfile": {
+      "description": "Button to add a profile"
+    },
+    "editProfile": "Edit Profile",
+    "@editProfile": {
+      "description": "Title for edit profile dialog"
+    },
+    "deleteProfile": "Delete Profile",
+    "@deleteProfile": {
+      "description": "Title for delete profile dialog"
+    },
+    "deleteProfileConfirmation": "Are you sure you want to delete {name}? This action cannot be undone.",
+    "@deleteProfileConfirmation": {
+      "description": "Confirmation message for profile deletion",
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "John's Profile"
+        }
+      }
+    },
+    "profileName": "Profile Name",
+    "@profileName": {
+      "description": "Label for profile name field"
+    },
+    "enterProfileName": "Enter profile name",
+    "@enterProfileName": {
+      "description": "Hint for profile name field"
+    },
+    "restrictionsCount": "{count, plural, =0{No restrictions} =1{1 restriction} other{{count} restrictions}}",
+    "@restrictionsCount": {
+      "description": "Count of restrictions in a profile",
+      "placeholders": {
+        "count": {
+          "type": "int",
+          "example": "5"
+        }
+      }
+    },
+    "profileRestrictions": "{name}'s Restrictions",
+    "@profileRestrictions": {
+      "description": "Title for profile restrictions screen",
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "John"
+        }
+      }
+    },
+    "noRestrictionsYet": "No restrictions yet",
+    "@noRestrictionsYet": {
+      "description": "Message shown when no restrictions exist"
+    },
+    "addFoodItemsToRestrict": "Add food items to restrict",
+    "@addFoodItemsToRestrict": {
+      "description": "Instruction to add food restrictions"
+    },
+    "addRestriction": "Add Restriction",
+    "@addRestriction": {
+      "description": "Button to add a restriction"
+    },
+    "editRestriction": "Edit Restriction",
+    "@editRestriction": {
+      "description": "Title for edit restriction dialog"
+    },
+    "addFoodRestriction": "Add Food Restriction",
+    "@addFoodRestriction": {
+      "description": "Title for add food restriction dialog"
+    },
+    "commonAllergens": "Common Allergens",
+    "@commonAllergens": {
+      "description": "Tab title for common allergens"
+    },
+    "allIngredients": "All Ingredients",
+    "@allIngredients": {
+      "description": "Tab title for all ingredients"
+    },
+    "search": "Search",
+    "@search": {
+      "description": "Tab title for search"
+    },
+    "searchIngredients": "Search Ingredients",
+    "@searchIngredients": {
+      "description": "Label for ingredient search field"
+    },
+    "typeToSearch": "Type to search...",
+    "@typeToSearch": {
+      "description": "Hint for search field"
+    },
+    "typeAtLeastTwoChars": "Type at least 2 characters to search",
+    "@typeAtLeastTwoChars": {
+      "description": "Message to type at least 2 characters"
+    },
+    "noResultsFound": "No results found",
+    "@noResultsFound": {
+      "description": "Message when no search results are found"
+    },
+    "itemAlreadyInRestrictions": "This item is already in your restrictions",
+    "@itemAlreadyInRestrictions": {
+      "description": "Message when item already exists in restrictions"
+    },
+    "category": "Category",
+    "@category": {
+      "description": "Label for category dropdown"
+    },
+    "severity": "Severity",
+    "@severity": {
+      "description": "Label for severity dropdown"
+    },
+    "allergen": "Allergen",
+    "@allergen": {
+      "description": "Category name for allergen"
+    },
+    "dietary": "Dietary",
+    "@dietary": {
+      "description": "Category name for dietary"
+    },
+    "religious": "Religious",
+    "@religious": {
+      "description": "Category name for religious"
+    },
+    "medical": "Medical",
+    "@medical": {
+      "description": "Category name for medical"
+    },
+    "@custom": {
+      "description": "Category name for custom"
+    },
+    "high": "High",
+    "@high": {
+      "description": "Severity level high"
+    },
+    "medium": "Medium",
+    "@medium": {
+      "description": "Severity level medium"
+    },
+    "low": "Low",
+    "@low": {
+      "description": "Severity level low"
+    },
+    "add": "Add",
+    "@add": {
+      "description": "Button label for add"
+    },
+    "save": "Save",
+    "@save": {
+      "description": "Button label for save"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+      "description": "Button label for cancel"
+    },
+    "delete": "Delete",
+    "@delete": {
+      "description": "Button label for delete"
+    },
+    "scanProduct": "Scan Product",
+    "@scanProduct": {
+      "description": "Title for scan product screen"
+    },
+    "manualEntry": "Manual Entry",
+    "@manualEntry": {
+      "description": "Button for manual barcode entry"
+    },
+    "enterEanCode": "Enter EAN Code",
+    "@enterEanCode": {
+      "description": "Title for manual EAN entry dialog"
+    },
+    "eanCode": "EAN Code",
+    "@eanCode": {
+      "description": "Label for EAN code field"
+    },
+    "enterEanDigits": "Enter 8 or 13 digit code",
+    "@enterEanDigits": {
+      "description": "Hint for EAN code field"
+    },
+    "verify": "Verify",
+    "@verify": {
+      "description": "Button to verify EAN code"
+    },
+    "productNotFound": "Product not found",
+    "@productNotFound": {
+      "description": "Message when product is not found"
+    },
+    "scanAgain": "Scan Again",
+    "@scanAgain": {
+      "description": "Button to scan another product"
+    },
+    "noActiveProfile": "No active profile - restrictions not checked",
+    "@noActiveProfile": {
+      "description": "Warning when no active profile is set"
+    },
+    "setProfile": "Set Profile",
+    "@setProfile": {
+      "description": "Button to set active profile"
+    },
+    "ingredients": "Ingredients",
+    "@ingredients": {
+      "description": "Label for ingredients section"
+    },
+    "noIngredientsInfo": "No ingredients information available",
+    "@noIngredientsInfo": {
+      "description": "Message when no ingredients info is available"
+    },
+    "allergens": "Allergens",
+    "@allergens": {
+      "description": "Label for allergens section"
+    },
+    "noAllergensInfo": "No allergens information available",
+    "@noAllergensInfo": {
+      "description": "Message when no allergens info is available"
+    },
+    "nutritionFacts": "Nutrition Facts (per 100g)",
+    "@nutritionFacts": {
+      "description": "Label for nutrition facts section"
+    },
+    "noNutritionInfo": "No nutrition information available",
+    "@noNutritionInfo": {
+      "description": "Message when no nutrition info is available"
+    },
+    "safetyCheck": "Safety Check",
+    "@safetyCheck": {
+      "description": "Label for safety check section"
+    },
+    "noActiveProfileWithRestrictions": "No active profile with restrictions",
+    "@noActiveProfileWithRestrictions": {
+      "description": "Message when no active profile has restrictions"
+    },
+    "noRestrictionsFound": "No restrictions found for {name}",
+    "@noRestrictionsFound": {
+      "description": "Message when no restrictions are found for profile",
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "John"
+        }
+      }
+    },
+    "containsRestrictedItems": "Contains {count, plural, =1{1 restricted item} other{{count} restricted items}}",
+    "@containsRestrictedItems": {
+      "description": "Warning about restricted items",
+      "placeholders": {
+        "count": {
+          "type": "int",
+          "example": "3"
+        }
+      }
+    },
+    "aboutSafeEats": "About SafeEats",
+    "@aboutSafeEats": {
+      "description": "Label for about section"
+    },
+    "visitWebsite": "Visit Website",
+    "@visitWebsite": {
+      "description": "Label for visit website button"
+    },
+    "version": "Version {version}",
+    "@version": {
+      "description": "App version display",
+      "placeholders": {
+        "version": {
+          "type": "String",
+          "example": "1.0.0"
+        }
+      }
+    },
+    "updateAvailable": "Update to {version}",
+    "@updateAvailable": {
+      "description": "Update notification",
+      "placeholders": {
+        "version": {
+          "type": "String",
+          "example": "1.1.0"
+        }
+      }
+    },
+    "newVersionAvailable": "New version {version} available!",
+    "@newVersionAvailable": {
+      "description": "New version notification",
+      "placeholders": {
+        "version": {
+          "type": "String",
+          "example": "1.1.0"
+        }
+      }
+    },
+    "update": "Update",
+    "@update": {
+      "description": "Update button label"
+    },
+    "checkingForUpdates": "Checking for updates...",
+    "@checkingForUpdates": {
+      "description": "Message when checking for updates"
+    },
+    "upToDate": "App is up to date",
+    "@upToDate": {
+      "description": "Message when app is up to date"
+    },
+    "updateNow": "Update Now",
+    "@updateNow": {
+      "description": "Button to update app"
+    },
+    "later": "Later",
+    "@later": {
+      "description": "Button to postpone update"
+    },
+    "language": "Language",
+    "@language": {
+      "description": "Label for language setting"
+    },
+    "systemDefault": "System Default",
+    "@systemDefault": {
+      "description": "Option for system default language"
+    },
+    "failedToLoadAllergens": "Failed to load allergens",
+    "@failedToLoadAllergens": {
+      "description": "Error message when allergens can't be loaded"
+    },
+    "failedToLoadIngredients": "Failed to load ingredients",
+    "@failedToLoadIngredients": {
+      "description": "Error message when ingredients can't be loaded"
+    },
+    "appDescription": "SafeEats helps you make informed decisions about food products through barcode scanning and dietary restriction management.",
+    "@appDescription": {
+      "description": "Description of the app"
+    },
+    "barcode": "Barcode",
+    "@barcode": {
+      "description": "Label for barcode field"
+    },
+    "welcomeToSafeEats": "Welcome to SafeEats",
+    "@welcomeToSafeEats": {
+      "description": "Welcome message on home screen"
+    },
+    "quickActions": "Quick Actions",
+    "@quickActions": {
+      "description": "Section title for quick actions"
+    },
+    "checkFoodSafety": "Check food safety",
+    "@checkFoodSafety": {
+      "description": "Subtitle for scan product action"
+    },
+    "createNewProfile": "Create new profile",
+    "@createNewProfile": {
+      "description": "Subtitle for add profile action"
+    },
+    "recentActivity": "Recent Activity",
+    "@recentActivity": {
+      "description": "Section title for recent activity"
+    },
+    "noRecentScans": "No recent scans",
+    "@noRecentScans": {
+      "description": "Message when no recent scans exist"
+    },
+    "startScanningProducts": "Start scanning products to see your history here",
+    "@startScanningProducts": {
+      "description": "Instruction for recent scans section"
+    },
+    "home": "Home",
+    "@home": {
+      "description": "Label for home tab"
+    },
+    "active": "Active",
+    "@active": {
+      "description": "Label for active profile badge"
+    },
+    "activate": "Activate",
+    "@activate": {
+      "description": "Button to activate profile"
+    },
+    "deactivate": "Deactivate",
+    "@deactivate": {
+      "description": "Button to deactivate profile"
+    },
+    "ingredientName": "Ingredient Name",
+    "@ingredientName": {
+      "description": "Label for ingredient name field"
+    },
+    "enterIngredientName": "Enter ingredient or allergen name",
+    "@enterIngredientName": {
+      "description": "Hint for ingredient name field"
+    },
+    "darkMode": "Dark Mode",
+    "@darkMode": {
+      "description": "Label for dark mode setting"
+    },
+    "themeMode": "Theme Mode",
+    "@themeMode": {
+      "description": "Label for theme mode setting"
+    },
+    "lightTheme": "Light",
+    "@lightTheme": {
+      "description": "Light theme option"
+    },
+    "darkTheme": "Dark",
+    "@darkTheme": {
+      "description": "Dark theme option"
+    },
+    "systemTheme": "System",
+    "@systemTheme": {
+      "description": "System theme option"
+    }
+  }

@@ -1,0 +1,429 @@
+{
+    "appTitle": "SafeEats",
+    "@appTitle": {
+      "description": "The title of the application"
+    },
+    "scan": "Skannaa",
+    "@scan": {
+      "description": "Label for scan tab"
+    },
+    "profiles": "Profiilit",
+    "@profiles": {
+      "description": "Label for profiles tab"
+    },
+    "settings": "Asetukset",
+    "@settings": {
+      "description": "Label for settings tab"
+    },
+    "noProfilesYet": "Ei profiileja vielä",
+    "@noProfilesYet": {
+      "description": "Message shown when no profiles exist"
+    },
+    "addProfileToStart": "Lisää profiili aloittaaksesi",
+    "@addProfileToStart": {
+      "description": "Instruction to add a profile"
+    },
+    "addProfile": "Lisää profiili",
+    "@addProfile": {
+      "description": "Button to add a profile"
+    },
+    "editProfile": "Muokkaa profiilia",
+    "@editProfile": {
+      "description": "Title for edit profile dialog"
+    },
+    "deleteProfile": "Poista profiili",
+    "@deleteProfile": {
+      "description": "Title for delete profile dialog"
+    },
+    "deleteProfileConfirmation": "Haluatko varmasti poistaa profiilin {name}? Tätä toimintoa ei voi peruuttaa.",
+    "@deleteProfileConfirmation": {
+      "description": "Confirmation message for profile deletion",
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "Jukan profiili"
+        }
+      }
+    },
+    "profileName": "Profiilin nimi",
+    "@profileName": {
+      "description": "Label for profile name field"
+    },
+    "enterProfileName": "Syötä profiilin nimi",
+    "@enterProfileName": {
+      "description": "Hint for profile name field"
+    },
+    "restrictionsCount": "{count, plural, =0{Ei rajoituksia} =1{1 rajoitus} other{{count} rajoitusta}}",
+    "@restrictionsCount": {
+      "description": "Count of restrictions in a profile",
+      "placeholders": {
+        "count": {
+          "type": "int",
+          "example": "5"
+        }
+      }
+    },
+    "profileRestrictions": "{name}n rajoitukset",
+    "@profileRestrictions": {
+      "description": "Title for profile restrictions screen",
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "Jukka"
+        }
+      }
+    },
+    "noRestrictionsYet": "Ei rajoituksia vielä",
+    "@noRestrictionsYet": {
+      "description": "Message shown when no restrictions exist"
+    },
+    "addFoodItemsToRestrict": "Lisää ruoka-aineita rajoitettavaksi",
+    "@addFoodItemsToRestrict": {
+      "description": "Instruction to add food restrictions"
+    },
+    "addRestriction": "Lisää rajoitus",
+    "@addRestriction": {
+      "description": "Button to add a restriction"
+    },
+    "editRestriction": "Muokkaa rajoitusta",
+    "@editRestriction": {
+      "description": "Title for edit restriction dialog"
+    },
+    "addFoodRestriction": "Lisää ruokarajoitus",
+    "@addFoodRestriction": {
+      "description": "Title for add food restriction dialog"
+    },
+    "commonAllergens": "Yleiset allergeenit",
+    "@commonAllergens": {
+      "description": "Tab title for common allergens"
+    },
+    "allIngredients": "Kaikki ainesosat",
+    "@allIngredients": {
+      "description": "Tab title for all ingredients"
+    },
+    "search": "Haku",
+    "@search": {
+      "description": "Tab title for search"
+    },
+    "searchIngredients": "Hae ainesosia",
+    "@searchIngredients": {
+      "description": "Label for ingredient search field"
+    },
+    "typeToSearch": "Kirjoita hakeaksesi...",
+    "@typeToSearch": {
+      "description": "Hint for search field"
+    },
+    "typeAtLeastTwoChars": "Kirjoita vähintään 2 merkkiä hakeaksesi",
+    "@typeAtLeastTwoChars": {
+      "description": "Message to type at least 2 characters"
+    },
+    "noResultsFound": "Ei tuloksia löytynyt",
+    "@noResultsFound": {
+      "description": "Message when no search results are found"
+    },
+    "itemAlreadyInRestrictions": "Tämä tuote on jo rajoituksissasi",
+    "@itemAlreadyInRestrictions": {
+      "description": "Message when item already exists in restrictions"
+    },
+    "category": "Kategoria",
+    "@category": {
+      "description": "Label for category dropdown"
+    },
+    "severity": "Vakavuus",
+    "@severity": {
+      "description": "Label for severity dropdown"
+    },
+    "allergen": "Allergeeni",
+    "@allergen": {
+      "description": "Category name for allergen"
+    },
+    "dietary": "Ruokavalio",
+    "@dietary": {
+      "description": "Category name for dietary"
+    },
+    "religious": "Uskonnollinen",
+    "@religious": {
+      "description": "Category name for religious"
+    },
+    "medical": "Lääketieteellinen",
+    "@medical": {
+      "description": "Category name for medical"
+    },
+    "@custom": {
+      "description": "Category name for custom"
+    },
+    "high": "Korkea",
+    "@high": {
+      "description": "Severity level high"
+    },
+    "medium": "Keskitaso",
+    "@medium": {
+      "description": "Severity level medium"
+    },
+    "low": "Matala",
+    "@low": {
+      "description": "Severity level low"
+    },
+    "add": "Lisää",
+    "@add": {
+      "description": "Button label for add"
+    },
+    "save": "Tallenna",
+    "@save": {
+      "description": "Button label for save"
+    },
+    "cancel": "Peruuta",
+    "@cancel": {
+      "description": "Button label for cancel"
+    },
+    "delete": "Poista",
+    "@delete": {
+      "description": "Button label for delete"
+    },
+    "scanProduct": "Skannaa tuote",
+    "@scanProduct": {
+      "description": "Title for scan product screen"
+    },
+    "manualEntry": "Manuaalinen syöttö",
+    "@manualEntry": {
+      "description": "Button for manual barcode entry"
+    },
+    "enterEanCode": "Syötä EAN-koodi",
+    "@enterEanCode": {
+      "description": "Title for manual EAN entry dialog"
+    },
+    "eanCode": "EAN-koodi",
+    "@eanCode": {
+      "description": "Label for EAN code field"
+    },
+    "enterEanDigits": "Syötä 8 tai 13 numeron koodi",
+    "@enterEanDigits": {
+      "description": "Hint for EAN code field"
+    },
+    "verify": "Vahvista",
+    "@verify": {
+      "description": "Button to verify EAN code"
+    },
+    "productNotFound": "Tuotetta ei löytynyt",
+    "@productNotFound": {
+      "description": "Message when product is not found"
+    },
+    "scanAgain": "Skannaa uudelleen",
+    "@scanAgain": {
+      "description": "Button to scan another product"
+    },
+    "noActiveProfile": "Ei aktiivista profiilia - rajoituksia ei tarkisteta",
+    "@noActiveProfile": {
+      "description": "Warning when no active profile is set"
+    },
+    "setProfile": "Aseta profiili",
+    "@setProfile": {
+      "description": "Button to set active profile"
+    },
+    "ingredients": "Ainesosat",
+    "@ingredients": {
+      "description": "Label for ingredients section"
+    },
+    "noIngredientsInfo": "Ainesosatietoja ei saatavilla",
+    "@noIngredientsInfo": {
+      "description": "Message when no ingredients info is available"
+    },
+    "allergens": "Allergeenit",
+    "@allergens": {
+      "description": "Label for allergens section"
+    },
+    "noAllergensInfo": "Allergeenietoja ei saatavilla",
+    "@noAllergensInfo": {
+      "description": "Message when no allergens info is available"
+    },
+    "nutritionFacts": "Ravintosisältö (per 100g)",
+    "@nutritionFacts": {
+      "description": "Label for nutrition facts section"
+    },
+    "noNutritionInfo": "Ravintotietoja ei saatavilla",
+    "@noNutritionInfo": {
+      "description": "Message when no nutrition info is available"
+    },
+    "safetyCheck": "Turvallisuustarkistus",
+    "@safetyCheck": {
+      "description": "Label for safety check section"
+    },
+    "noActiveProfileWithRestrictions": "Ei aktiivista profiilia rajoituksineen",
+    "@noActiveProfileWithRestrictions": {
+      "description": "Message when no active profile has restrictions"
+    },
+    "noRestrictionsFound": "Ei rajoituksia löytynyt käyttäjälle {name}",
+    "@noRestrictionsFound": {
+      "description": "Message when no restrictions are found for profile",
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "Jukka"
+        }
+      }
+    },
+    "containsRestrictedItems": "Sisältää {count, plural, =1{1 rajoitetun tuotteen} other{{count} rajoitettua tuotetta}}",
+    "@containsRestrictedItems": {
+      "description": "Warning about restricted items",
+      "placeholders": {
+        "count": {
+          "type": "int",
+          "example": "3"
+        }
+      }
+    },
+    "aboutSafeEats": "Tietoja SafeEats-sovelluksesta",
+    "@aboutSafeEats": {
+      "description": "Label for about section"
+    },
+    "visitWebsite": "Käy verkkosivulla",
+    "@visitWebsite": {
+      "description": "Label for visit website button"
+    },
+    "version": "Versio {version}",
+    "@version": {
+      "description": "App version display",
+      "placeholders": {
+        "version": {
+          "type": "String",
+          "example": "1.0.0"
+        }
+      }
+    },
+    "updateAvailable": "Päivitä versioon {version}",
+    "@updateAvailable": {
+      "description": "Update notification",
+      "placeholders": {
+        "version": {
+          "type": "String",
+          "example": "1.1.0"
+        }
+      }
+    },
+    "newVersionAvailable": "Uusi versio {version} saatavilla!",
+    "@newVersionAvailable": {
+      "description": "New version notification",
+      "placeholders": {
+        "version": {
+          "type": "String",
+          "example": "1.1.0"
+        }
+      }
+    },
+    "update": "Päivitä",
+    "@update": {
+      "description": "Update button label"
+    },
+    "checkingForUpdates": "Tarkistetaan päivityksiä...",
+    "@checkingForUpdates": {
+      "description": "Message when checking for updates"
+    },
+    "upToDate": "Sovellus on ajan tasalla",
+    "@upToDate": {
+      "description": "Message when app is up to date"
+    },
+    "updateNow": "Päivitä nyt",
+    "@updateNow": {
+      "description": "Button to update app"
+    },
+    "later": "Myöhemmin",
+    "@later": {
+      "description": "Button to postpone update"
+    },
+    "language": "Kieli",
+    "@language": {
+      "description": "Label for language setting"
+    },
+    "systemDefault": "Järjestelmän oletus",
+    "@systemDefault": {
+      "description": "Option for system default language"
+    },
+    "failedToLoadAllergens": "Allergeenien lataus epäonnistui",
+    "@failedToLoadAllergens": {
+      "description": "Error message when allergens can't be loaded"
+    },
+    "failedToLoadIngredients": "Ainesosien lataus epäonnistui",
+    "@failedToLoadIngredients": {
+      "description": "Error message when ingredients can't be loaded"
+    },
+    "appDescription": "SafeEats auttaa tekemään tietoisia päätöksiä elintarvikkeista viivakoodin skannauksen ja ruokavaliorajoitusten hallinnan avulla.",
+    "@appDescription": {
+      "description": "Description of the app"
+    },
+    "barcode": "Viivakoodi",
+    "@barcode": {
+      "description": "Label for barcode field"
+    },
+    "welcomeToSafeEats": "Tervetuloa SafeEats-sovellukseen",
+    "@welcomeToSafeEats": {
+      "description": "Welcome message on home screen"
+    },
+    "quickActions": "Pikatoiminnot",
+    "@quickActions": {
+      "description": "Section title for quick actions"
+    },
+    "checkFoodSafety": "Tarkista ruoan turvallisuus",
+    "@checkFoodSafety": {
+      "description": "Subtitle for scan product action"
+    },
+    "createNewProfile": "Luo uusi profiili",
+    "@createNewProfile": {
+      "description": "Subtitle for add profile action"
+    },
+    "recentActivity": "Viimeaikainen toiminta",
+    "@recentActivity": {
+      "description": "Section title for recent activity"
+    },
+    "noRecentScans": "Ei viimeaikaisia skannauksia",
+    "@noRecentScans": {
+      "description": "Message when no recent scans exist"
+    },
+    "startScanningProducts": "Aloita tuotteiden skannaus nähdäksesi historiasi täällä",
+    "@startScanningProducts": {
+      "description": "Instruction for recent scans section"
+    },
+    "home": "Koti",
+    "@home": {
+      "description": "Label for home tab"
+    },
+    "active": "Aktiivinen",
+    "@active": {
+      "description": "Label for active profile badge"
+    },
+    "activate": "Aktivoi",
+    "@activate": {
+      "description": "Button to activate profile"
+    },
+    "deactivate": "Poista käytöstä",
+    "@deactivate": {
+      "description": "Button to deactivate profile"
+    },
+    "ingredientName": "Ainesosan nimi",
+    "@ingredientName": {
+      "description": "Label for ingredient name field"
+    },
+    "enterIngredientName": "Syötä ainesosan tai allergeenin nimi",
+    "@enterIngredientName": {
+      "description": "Hint for ingredient name field"
+    },
+    "darkMode": "Tumma tila",
+    "@darkMode": {
+      "description": "Label for dark mode setting"
+    },
+    "themeMode": "Teeman tila",
+    "@themeMode": {
+      "description": "Label for theme mode setting"
+    },
+    "lightTheme": "Vaalea",
+    "@lightTheme": {
+      "description": "Light theme option"
+    },
+    "darkTheme": "Tumma",
+    "@darkTheme": {
+      "description": "Dark theme option"
+    },
+    "systemTheme": "Järjestelmä",
+    "@systemTheme": {
+      "description": "System theme option"
+    }
+}

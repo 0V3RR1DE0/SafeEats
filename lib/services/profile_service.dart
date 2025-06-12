@@ -52,7 +52,13 @@ class ProfileService {
     try {
       return profiles.firstWhere((p) => p.isActive);
     } catch (_) {
-      return profiles.isEmpty ? null : profiles.first;
+      if (profiles.isNotEmpty) {
+        // If no active profile, set the first one as active
+        final firstProfile = profiles.first.copyWith(isActive: true);
+        await updateProfile(firstProfile);
+        return firstProfile;
+      }
+      return null;
     }
   }
 
@@ -72,6 +78,8 @@ class ProfileService {
     return false;
   }
 
+  // This method is no longer needed as we're using localized strings
+  // but kept for backward compatibility
   List<String> getCommonRestrictions() {
     return [
       // Allergens
@@ -98,6 +106,8 @@ class ProfileService {
     ];
   }
 
+  // This method is no longer needed as we're using the category from the UI
+  // but kept for backward compatibility
   RestrictionCategory getCategoryForRestriction(String restriction) {
     final allergens = [
       'peanuts',
@@ -140,6 +150,6 @@ class ProfileService {
       return RestrictionCategory.medical;
     }
 
-    return RestrictionCategory.custom;
+    return RestrictionCategory.dietary;
   }
 }

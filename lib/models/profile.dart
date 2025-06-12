@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Profile {
   final String id;
@@ -108,21 +109,19 @@ enum RestrictionCategory {
   allergen,
   dietary,
   religious,
-  medical,
-  custom;
+  medical;
 
-  String get displayName {
+  String getDisplayName(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (this) {
       case RestrictionCategory.allergen:
-        return 'Allergen';
+        return l10n.allergen;
       case RestrictionCategory.dietary:
-        return 'Dietary';
+        return l10n.dietary;
       case RestrictionCategory.religious:
-        return 'Religious';
+        return l10n.religious;
       case RestrictionCategory.medical:
-        return 'Medical';
-      case RestrictionCategory.custom:
-        return 'Custom';
+        return l10n.medical;
     }
   }
 }
@@ -132,14 +131,15 @@ enum RestrictionSeverity {
   medium,
   low;
 
-  String get displayName {
+  String getDisplayName(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (this) {
       case RestrictionSeverity.high:
-        return 'High';
+        return l10n.high;
       case RestrictionSeverity.medium:
-        return 'Medium';
+        return l10n.medium;
       case RestrictionSeverity.low:
-        return 'Low';
+        return l10n.low;
     }
   }
 

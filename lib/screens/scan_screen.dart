@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../services/product_service.dart';
 import '../services/profile_service.dart';
+import '../services/scan_history_service.dart';
 import '../models/profile.dart';
 
 class ScanScreen extends StatefulWidget {
@@ -13,11 +15,12 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanScreenState extends State<ScanScreen> {
-  final MobileScannerController controller = MobileScannerController();
+  final MobileScannerController controller = MobileScannerController(
+    formats: [BarcodeFormat.ean13, BarcodeFormat.ean8],
+    detectionSpeed: DetectionSpeed.normal,
+  );
   final ProductService _productService = ProductService();
   late Future<ProfileService> _profileServiceFuture;
-  bool _isScanning = true;
-  String? _lastCode;
   bool _isLoading = false;
   Profile? _activeProfile;
 
@@ -31,9 +34,7 @@ class _ScanScreenState extends State<ScanScreen> {
   Future<void> _loadActiveProfile() async {
     final service = await _profileServiceFuture;
     final profile = await service.getActiveProfile();
-    setState(() {
-      _activeProfile = profile;
-    });
+    setState(() => _activeProfile = profile);
   }
 
   @override
@@ -43,34 +44,37 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   void _showManualEntryDialog() {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Enter EAN Code'),
+        title: Text(l10n.enterEanCode),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(
-            labelText: 'EAN Code',
-            hintText: 'Enter product EAN code',
+          decoration: InputDecoration(
+            labelText: l10n.eanCode,
+            hintText: l10n.enterEanDigits,
+            prefixIcon: const Icon(Icons.confirmation_number),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () {
               final code = controller.text.trim();
-              if (code.isNotEmpty) {
+              if (code.length >= 8) {
                 Navigator.pop(context);
                 _processBarcode(code);
               }
             },
-            child: const Text('Check'),
+            child: Text(l10n.verify),
           ),
         ],
       ),
@@ -78,217 +82,120 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future<void> _processBarcode(String barcode) async {
+    if (!mounted) return;
+
+    final l10n = AppLocalizations.of(context)!;
+
     setState(() {
-      _lastCode = barcode;
-      _isScanning = false;
       _isLoading = true;
     });
 
     try {
       final product = await _productService.getProductByBarcode(barcode);
-
       if (!mounted) return;
 
       if (product != null) {
         await showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          isDismissible: true,
-          enableDrag: true,
-          builder: (context) => DraggableScrollableSheet(
-            initialChildSize: 0.7,
-            minChildSize: 0.5,
-            maxChildSize: 0.95,
-            expand: false,
-            builder: (_, controller) => ProductDetailsSheet(
-              product: product,
-              activeProfile: _activeProfile,
-              scrollController: controller,
-              onScanAgain: () {
-                Navigator.pop(context);
-                setState(() {
-                  _isScanning = true;
-                  _isLoading = false;
-                });
-              },
-            ),
-          ),
-        ).then((_) {
-          // Reset state after bottom sheet is closed
-          setState(() {
-            _isScanning = true;
-            _isLoading = false;
-          });
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Product not found'),
-            behavior: SnackBarBehavior.floating,
+          builder: (context) => ProductDetailsSheet(
+            product: product,
+            activeProfile: _activeProfile,
+            onScanAgain: () => setState(() => _isLoading = false),
           ),
         );
-        setState(() {
-          _isLoading = false;
-        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.productNotFound)),
+        );
       }
     } catch (e) {
-      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          behavior: SnackBarBehavior.floating,
-        ),
+        SnackBar(content: Text('Error: ${e.toString()}')),
       );
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _onDetect(BarcodeCapture capture) async {
-    if (!_isScanning) return;
-
-    final List<Barcode> barcodes = capture.barcodes;
-    for (final barcode in barcodes) {
-      if (barcode.rawValue == null) continue;
-      await _processBarcode(barcode.rawValue!);
-      break;
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan Product'),
+        title: Text(l10n.scanProduct),
         actions: [
           IconButton(
             icon: ValueListenableBuilder(
               valueListenable: controller.torchState,
-              builder: (context, state, child) {
-                switch (state) {
-                  case TorchState.off:
-                    return const Icon(Icons.flash_off);
-                  case TorchState.on:
-                    return const Icon(Icons.flash_on);
-                }
-              },
+              builder: (_, state, __) => Icon(
+                state == TorchState.off ? Icons.flash_off : Icons.flash_on,
+              ),
             ),
-            onPressed: () => controller.toggleTorch(),
+            onPressed: controller.toggleTorch,
           ),
           IconButton(
             icon: ValueListenableBuilder(
               valueListenable: controller.cameraFacingState,
-              builder: (context, state, child) {
-                switch (state) {
-                  case CameraFacing.front:
-                    return const Icon(Icons.camera_front);
-                  case CameraFacing.back:
-                    return const Icon(Icons.camera_rear);
-                }
-              },
+              builder: (_, state, __) => Icon(
+                state == CameraFacing.front
+                    ? Icons.camera_front
+                    : Icons.camera_rear,
+              ),
             ),
-            onPressed: () => controller.switchCamera(),
+            onPressed: controller.switchCamera,
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
+          MobileScanner(
+            controller: controller,
+            onDetect: (capture) {
+              final barcodes = capture.barcodes;
+              for (final barcode in barcodes) {
+                if (barcode.rawValue != null && _isLoading == false) {
+                  _processBarcode(barcode.rawValue!);
+                  break;
+                }
+              }
+            },
+          ),
           if (_activeProfile == null)
-            Container(
+            MaterialBanner(
+              content: Text(l10n.noActiveProfile),
+              backgroundColor: Theme.of(context).colorScheme.errorContainer,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, '/profiles'),
+                  child: Text(l10n.setProfile),
+                ),
+              ],
+            ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
               padding: const EdgeInsets.all(16),
-              color: Colors.orange[100],
-              child: Row(
-                children: [
-                  const Icon(Icons.warning, color: Colors.orange),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'No active profile selected. Product restrictions won\'t be checked.',
-                      style: TextStyle(color: Colors.orange[900]),
-                    ),
-                  ),
-                ],
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.1),
+                    Colors.black.withOpacity(0.4),
+                  ],
+                ),
+              ),
+              child: FilledButton.icon(
+                icon: const Icon(Icons.keyboard),
+                label: Text(l10n.manualEntry),
+                onPressed: _showManualEntryDialog,
               ),
             ),
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _isScanning
-                    ? Stack(
-                        children: [
-                          MobileScanner(
-                            controller: controller,
-                            onDetect: _onDetect,
-                          ),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              color: Colors.black87,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.qr_code_scanner,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        'Point camera at product barcode',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton.icon(
-                                    onPressed: _showManualEntryDialog,
-                                    icon: const Icon(
-                                      Icons.keyboard,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text(
-                                      'Enter EAN manually',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Last scanned code:',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            Text(
-                              _lastCode ?? 'None',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() => _isScanning = true);
-                              },
-                              child: const Text('Scan Again'),
-                            ),
-                            TextButton(
-                              onPressed: _showManualEntryDialog,
-                              child: const Text('Enter EAN manually'),
-                            ),
-                          ],
-                        ),
-                      ),
           ),
         ],
       ),
@@ -296,179 +203,320 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 }
 
-class ProductDetailsSheet extends StatelessWidget {
+class ProductDetailsSheet extends StatefulWidget {
   final Product product;
   final Profile? activeProfile;
-  final ScrollController scrollController;
   final VoidCallback onScanAgain;
 
   const ProductDetailsSheet({
     super.key,
     required this.product,
     required this.activeProfile,
-    required this.scrollController,
     required this.onScanAgain,
   });
 
-  List<String> _checkRestrictions() {
-    if (activeProfile == null) return [];
+  @override
+  State<ProductDetailsSheet> createState() => _ProductDetailsSheetState();
+}
 
-    final restrictionNames =
-        activeProfile!.restrictions.map((r) => r.name.toLowerCase()).toList();
+class _ProductDetailsSheetState extends State<ProductDetailsSheet> {
+  final ScanHistoryService _scanHistoryService = ScanHistoryService();
 
-    return product.getMatchingRestrictions(restrictionNames);
+  @override
+  void initState() {
+    super.initState();
+    _saveScanToHistory();
+  }
+
+  Future<void> _saveScanToHistory() async {
+    if (widget.activeProfile != null) {
+      final matchingRestrictions = widget.activeProfile!.restrictions
+          .where((restriction) =>
+              widget.product.containsRestriction(restriction.name))
+          .toList();
+
+      await _scanHistoryService.addScan(
+        widget.product,
+        matchingRestrictions.isNotEmpty,
+        matchingRestrictions.length,
+      );
+    } else {
+      await _scanHistoryService.addScan(widget.product, false, 0);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final restrictedIngredients = _checkRestrictions();
-    final hasRestrictions = restrictedIngredients.isNotEmpty;
+    final l10n = AppLocalizations.of(context)!;
+    final productService = ProductService();
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: ListView(
-        controller: scrollController,
-        children: [
-          if (activeProfile != null)
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: hasRestrictions ? Colors.red[100] : Colors.green[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    hasRestrictions ? Icons.warning : Icons.check_circle,
-                    color: hasRestrictions ? Colors.red : Colors.green,
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.7,
+      builder: (_, controller) => SingleChildScrollView(
+        controller: controller,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.outline,
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      hasRestrictions
-                          ? 'Contains restricted ingredients: ${restrictedIngredients.join(", ")}'
-                          : 'No restricted ingredients found',
-                      style: TextStyle(
-                        color: hasRestrictions
-                            ? Colors.red[900]
-                            : Colors.green[900],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Product details header
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.product.imageUrl != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        widget.product.imageUrl!,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: 100,
+                          height: 100,
+                          color: Colors.grey.shade200,
+                          child:
+                              const Icon(Icons.image_not_supported, size: 40),
+                        ),
                       ),
+                    )
+                  else
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.no_food, size: 40),
+                    ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.product.name,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(
+                          widget.product.brand,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text('${l10n.barcode}: ${widget.product.barcode}'),
+                        if (widget.product.nutriScore != null)
+                          Chip(
+                            label: Text(
+                                'Nutri-Score ${widget.product.nutriScore}'),
+                            backgroundColor:
+                                _getNutriScoreColor(widget.product.nutriScore!),
+                          ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-          const SizedBox(height: 16),
-          if (product.imageUrl != null)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                product.imageUrl!,
-                height: 200,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return const SizedBox(
-                    height: 200,
-                    child: Center(
-                      child: Icon(Icons.image_not_supported),
-                    ),
-                  );
-                },
-              ),
-            ),
-          const SizedBox(height: 16),
-          Text(
-            product.name,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          Text(
-            product.brand,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-          ),
-          if (product.nutriScore != null) ...[
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                const Text('Nutri-Score: '),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _getNutriScoreColor(product.nutriScore!),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    product.nutriScore!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              const SizedBox(height: 24),
+
+              // Safety check section
+              if (widget.activeProfile != null)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.safetyCheck,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        _buildSafetyCheck(context),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
-          const SizedBox(height: 16),
-          const Text(
-            'Ingredients',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(product.ingredients.join(', ')),
-          if (product.allergens.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            const Text(
-              'Allergens',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 16),
+
+              // Ingredients section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.ingredients,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      widget.product.ingredients.isEmpty
+                          ? Text(l10n.noIngredientsInfo)
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: widget.product.ingredients
+                                  .map((ingredient) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text('• '),
+                                            Expanded(child: Text(ingredient)),
+                                          ],
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: product.allergens.map((allergen) {
-                return Chip(
-                  label: Text(allergen),
-                  backgroundColor: Colors.red[100],
-                );
-              }).toList(),
-            ),
-          ],
-          const SizedBox(height: 16),
-          const Text(
-            'Nutritional Values (per 100g)',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+              const SizedBox(height: 16),
+
+              // Allergens section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.allergens,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      widget.product.allergens.isEmpty
+                          ? Text(l10n.noAllergensInfo)
+                          : Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: widget.product.allergens
+                                  .map((allergen) => Chip(
+                                        label: Text(allergen),
+                                        backgroundColor: Colors.red.shade100,
+                                      ))
+                                  .toList(),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Nutrition section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.nutritionFacts,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      widget.product.nutriments.isEmpty
+                          ? Text(l10n.noNutritionInfo)
+                          : _buildNutritionTable(context, productService),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Scan again button
+              Center(
+                child: FilledButton(
+                  onPressed: widget.onScanAgain,
+                  child: Text(l10n.scanAgain),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
           ),
-          const SizedBox(height: 8),
-          _buildNutritionTable(context),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onScanAgain,
-            child: const Text('Scan Another Product'),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildNutritionTable(BuildContext context) {
-    final nutrientsList = [
+  Widget _buildSafetyCheck(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (widget.activeProfile == null ||
+        widget.activeProfile!.restrictions.isEmpty) {
+      return Text(l10n.noActiveProfileWithRestrictions);
+    }
+
+    final matchingRestrictions = widget.activeProfile!.restrictions
+        .where((restriction) =>
+            widget.product.containsRestriction(restriction.name))
+        .toList();
+
+    if (matchingRestrictions.isEmpty) {
+      return Row(
+        children: [
+          const Icon(Icons.check_circle, color: Colors.green, size: 24),
+          const SizedBox(width: 8),
+          Text(
+            l10n.noRestrictionsFound(widget.activeProfile!.name),
+            style: const TextStyle(color: Colors.green),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Icon(Icons.warning, color: Colors.red, size: 24),
+            const SizedBox(width: 8),
+            Text(
+              l10n.containsRestrictedItems(matchingRestrictions.length),
+              style: const TextStyle(
+                  color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ...matchingRestrictions.map((restriction) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                children: [
+                  Icon(Icons.block,
+                      color: restriction.severity.color, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${restriction.name} (${restriction.severity.getDisplayName(context)})',
+                    ),
+                  ),
+                ],
+              ),
+            )),
+      ],
+    );
+  }
+
+  Widget _buildNutritionTable(
+      BuildContext context, ProductService productService) {
+    final nutrientKeys = [
       'energy',
       'fat',
       'saturated-fat',
@@ -480,74 +528,55 @@ class ProductDetailsSheet extends StatelessWidget {
     ];
 
     return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(3),
+        1: FlexColumnWidth(2),
+      },
       border: TableBorder.all(
-        color: Colors.grey[300]!,
+        color: Colors.grey.shade300,
         width: 1,
       ),
-      children: [
-        const TableRow(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-          ),
-          children: [
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                'Nutrient',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+      children: nutrientKeys
+          .where((key) => widget.product.nutriments.containsKey('${key}_100g'))
+          .map((key) => TableRow(
+                decoration: BoxDecoration(
+                  color: nutrientKeys.indexOf(key) % 2 == 0
+                      ? Colors.grey.shade100
+                      : Colors.white,
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                'Value',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        ...nutrientsList.map((nutrient) {
-          final value =
-              ProductService().getNutrientValue(product.nutriments, nutrient);
-          return TableRow(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  ProductService().formatNutrientName(nutrient),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(value),
-              ),
-            ],
-          );
-        }).toList(),
-      ],
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(productService.formatNutrientName(key)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      productService.getNutrientValue(
+                          widget.product.nutriments, key),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ],
+              ))
+          .toList(),
     );
   }
 
   Color _getNutriScoreColor(String score) {
     switch (score.toUpperCase()) {
       case 'A':
-        return Colors.green;
+        return Colors.green.shade400;
       case 'B':
-        return Colors.lightGreen;
+        return Colors.lightGreen.shade400;
       case 'C':
-        return Colors.yellow;
+        return Colors.yellow.shade400;
       case 'D':
-        return Colors.orange;
+        return Colors.orange.shade400;
       case 'E':
-        return Colors.red;
+        return Colors.red.shade400;
       default:
-        return Colors.grey;
+        return Colors.grey.shade400;
     }
   }
 }
