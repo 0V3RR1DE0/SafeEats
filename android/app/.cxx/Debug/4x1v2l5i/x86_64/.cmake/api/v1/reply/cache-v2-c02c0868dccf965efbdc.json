@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "arm64-v8a"
+			"value" : "x86_64"
 		},
 		{
 			"name" : "ANDROID_NDK",
@@ -63,7 +63,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "arm64-v8a"
+			"value" : "x86_64"
 		},
 		{
 			"name" : "CMAKE_ANDROID_NDK",
@@ -151,7 +151,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "f:/Dev/Android/safeeats/android/app/.cxx/Debug/4x1v2l5i/arm64-v8a"
+			"value" : "f:/Dev/Android/safeeats/android/app/.cxx/Debug/4x1v2l5i/x86_64"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -527,7 +527,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/tools/msys64/mingw64/bin/dlltool.exe"
+			"value" : "C:/Strawberry/c/bin/dlltool.exe"
 		},
 		{
 			"name" : "CMAKE_ERROR_DEPRECATED",
@@ -751,7 +751,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "F:\\Dev\\Android\\safeeats\\build\\app\\intermediates\\cxx\\Debug\\4x1v2l5i\\obj\\arm64-v8a"
+			"value" : "F:\\Dev\\Android\\safeeats\\build\\app\\intermediates\\cxx\\Debug\\4x1v2l5i\\obj\\x86_64"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1023,7 +1023,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "F:\\Dev\\Android\\safeeats\\build\\app\\intermediates\\cxx\\Debug\\4x1v2l5i\\obj\\arm64-v8a"
+			"value" : "F:\\Dev\\Android\\safeeats\\build\\app\\intermediates\\cxx\\Debug\\4x1v2l5i\\obj\\x86_64"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1331,7 +1331,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "F:/Dev/Android/safeeats/android/app/.cxx/Debug/4x1v2l5i/arm64-v8a"
+			"value" : "F:/Dev/Android/safeeats/android/app/.cxx/Debug/4x1v2l5i/x86_64"
 		},
 		{
 			"name" : "Project_IS_TOP_LEVEL",

@@ -36,11 +36,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       setState(() {
-        _version = packageInfo.version;
+        // Include build number to show full version like "1.0.0-beta+3"
+        _version = '${packageInfo.version}+${packageInfo.buildNumber}';
       });
     } catch (e) {
       setState(() {
-        _version = '1.0.0';
+        _version = '1.0.0+1';
       });
     }
   }
@@ -138,7 +139,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication, // Force external browser
+      );
+    } else {
+      // Show error if URL can't be launched
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open $url'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -242,6 +256,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         icon: const Icon(Icons.refresh),
                         onPressed: _checkForUpdates,
                       ),
+            onLongPress: () => _showVersionInfoDialog(),
           ),
         ],
       ),
@@ -409,6 +424,81 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
             child: const Text('Visit GitHub'),
           ),
+        ],
+      ),
+    );
+  }
+
+  void _showVersionInfoDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Version Information'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'How Version Checking Works:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              const Text('1. Current Version:'),
+              Text('   $_version',
+                  style: const TextStyle(fontFamily: 'monospace')),
+              const SizedBox(height: 8),
+              const Text('2. Check Process:'),
+              const Text('   • App queries GitHub API for latest release'),
+              const Text(
+                  '   • URL: api.github.com/repos/0V3RR1DE0/SafeEats/releases/latest'),
+              const Text('   • Compares version numbers automatically'),
+              const SizedBox(height: 8),
+              const Text('3. Version Format:'),
+              const Text('   • Format: major.minor.patch-type+build'),
+              const Text('   • Example: 1.0.0-beta+3'),
+              const Text('   • +3 = build number (for APK installation)'),
+              const SizedBox(height: 8),
+              const Text('4. Update Detection:'),
+              const Text('   • Compares major.minor.patch numbers'),
+              const Text('   • Ignores pre-release suffixes (-beta, -alpha)'),
+              const Text(
+                  '   • Shows "Update Available" if newer version found'),
+              const SizedBox(height: 8),
+              const Text('5. Manual Updates:'),
+              const Text('   • SafeEats is sideloaded (not from Play Store)'),
+              const Text('   • Updates require manual APK download/install'),
+              const Text('   • "Update" button opens download page'),
+              const SizedBox(height: 12),
+              if (_latestVersion != null) ...[
+                const Text(
+                  'Latest Available:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('   $_latestVersion',
+                    style: const TextStyle(fontFamily: 'monospace')),
+                const SizedBox(height: 8),
+              ],
+              const Text(
+                'Tip: Long press this version section to see this info!',
+                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+          if (_updateUrl != null)
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _launchUrl(_updateUrl!);
+              },
+              child: const Text('Download Page'),
+            ),
         ],
       ),
     );

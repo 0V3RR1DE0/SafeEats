@@ -527,7 +527,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/tools/msys64/mingw64/bin/dlltool.exe"
+			"value" : "C:/Strawberry/c/bin/dlltool.exe"
 		},
 		{
 			"name" : "CMAKE_ERROR_DEPRECATED",
