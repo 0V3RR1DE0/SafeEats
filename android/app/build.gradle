@@ -20,14 +20,16 @@ android {
     }
 
     defaultConfig {
-        // Unique Application ID matching the upcoming domain
         applicationId = "dev.safeeats"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 21
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // Force bundled ML Kit (no Google Play Services needed)
+        manifestPlaceholders = [
+            'ml_kit_barcode_scanning': 'bundled'
+        ]
     }
 
     signingConfigs {
@@ -43,8 +45,11 @@ android {
 
     buildTypes {
         release {
-            // Use consistent signing for all releases to enable seamless updates
             signingConfig = signingConfigs.release
+            // Disable all code shrinking and obfuscation for FOSS simplicity
+            minifyEnabled false
+            shrinkResources false
+            // No proguardFiles needed when minifyEnabled is false
         }
     }
 }

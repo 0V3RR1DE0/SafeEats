@@ -46,7 +46,7 @@ Visit our website at [eats.netique.lol](https://eats.netique.lol) for more infor
 ## 📊 Statistics
 
 - **50K+** Products in Database
-- **v1.0.0-beta+1** Current Version
+- **v1.0.0-beta+5** Current Version
 - **~31MB** App Size
 - **2** Languages Supported (English, Finnish)
 

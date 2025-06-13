@@ -1,0 +1,2 @@
+F:/Dev/Android/safeeats/android/app/.cxx/RelWithDebInfo/412c35o1/x86_64/CMakeFiles/edit_cache.dir
+F:/Dev/Android/safeeats/android/app/.cxx/RelWithDebInfo/412c35o1/x86_64/CMakeFiles/rebuild_cache.dir

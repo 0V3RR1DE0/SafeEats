@@ -6,10 +6,15 @@
     
     <application
         android:label="SafeEats"
-        android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true">
+        
+        <!-- Force bundled ML Kit models -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
+            
         <activity
             android:name=".MainActivity"
             android:exported="true"
