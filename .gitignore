@@ -10,6 +10,9 @@
 .svn/
 migrate_working_dir/
 
+# Project-specific
+memlog/
+
 # IntelliJ related
 *.iml
 *.ipr
