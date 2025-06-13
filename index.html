@@ -201,7 +201,7 @@
                     
                     <div class="download-stats">
                         <div class="stat">
-                            <span class="stat-number">v1.0.0-beta+7</span>
+                            <span class="stat-number" id="version-number">Loading...</span>
                             <span class="stat-label">Current Version</span>
                         </div>
                         <div class="stat">
@@ -386,6 +386,24 @@
     </footer>
 
     <script>
+        // Function to fetch and display the latest version
+        async function fetchLatestVersion() {
+            try {
+                const response = await fetch('https://api.github.com/repos/0V3RR1DE0/SafeEats/releases/latest');
+                const data = await response.json();
+                
+                if (data.tag_name) {
+                    document.getElementById('version-number').textContent = data.tag_name;
+                } else {
+                    throw new Error('No tag_name found');
+                }
+            } catch (error) {
+                console.error('Error fetching version:', error);
+                // Fallback to a default version if API fails
+                document.getElementById('version-number').textContent = 'v1.0.0-beta+7';
+            }
+        }
+
         // Mobile navigation toggle
         const navToggle = document.getElementById('navToggle');
         const navMenu = document.querySelector('.nav-menu');
@@ -461,8 +479,11 @@
             });
         }
         
-        // Initialize download counter on page load
-        document.addEventListener('DOMContentLoaded', updateDownloadCounter);
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDownloadCounter();
+            fetchLatestVersion();
+        });
     </script>
 </body>
 </html>
