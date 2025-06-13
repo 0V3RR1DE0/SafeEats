@@ -1,0 +1,153 @@
+# Crowdin Configuration for SafeEats
+# This file configures the Crowdin CLI for automated translation management
+
+# Project identifier on Crowdin
+project_id: "safeeats"
+
+# API token (will be set as environment variable)
+api_token_env: "CROWDIN_API_TOKEN"
+
+# Base path for the project
+base_path: "."
+
+# Preserve hierarchy in Crowdin
+preserve_hierarchy: true
+
+# Files configuration
+files:
+  # Source files (English)
+  - source: "/lib/l10n/app_en.arb"
+    translation: "/lib/l10n/app_%two_letters_code%.arb"
+    type: "arb"
+    
+    # Translation configuration
+    languages_mapping:
+      two_letters_code:
+        # European languages
+        es: "es"      # Spanish
+        fr: "fr"      # French  
+        de: "de"      # German
+        it: "it"      # Italian
+        pt: "pt"      # Portuguese
+        nl: "nl"      # Dutch
+        
+        # Nordic languages
+        sv: "sv"      # Swedish
+        no: "no"      # Norwegian
+        da: "da"      # Danish
+        fi: "fi"      # Finnish (already exists)
+        
+        # Eastern European
+        pl: "pl"      # Polish
+        ru: "ru"      # Russian
+        cs: "cs"      # Czech
+        hu: "hu"      # Hungarian
+        
+        # Asian languages
+        ja: "ja"      # Japanese
+        ko: "ko"      # Korean
+        zh: "zh"      # Chinese (Simplified)
+        
+        # Other major languages
+        ar: "ar"      # Arabic
+        hi: "hi"      # Hindi
+        tr: "tr"      # Turkish
+        
+    # Update options
+    update_option: "update_as_unapproved"
+    
+    # Export options
+    export_options:
+      export_approved_only: false
+      
+    # Translation options
+    translation_replace:
+      # Preserve Flutter placeholders
+      "\\{([^}]+)\\}": "{$1}"
+
+# Workflow settings
+workflow:
+  # Auto-approve translations from trusted contributors
+  auto_approve_imported: false
+  
+  # Require approval before export
+  export_approved_only: false
+
+# Integration settings
+integrations:
+  # GitHub integration
+  github:
+    # Auto-create pull requests for translations
+    create_pull_request: true
+    pull_request_title: "New translations from Crowdin"
+    pull_request_body: |
+      This pull request contains new translations from Crowdin.
+      
+      Please review the changes and merge if everything looks correct.
+      
+      Translation contributors will be credited in the next release.
+    
+    # Target branch for pull requests
+    pull_request_base_branch: "localization"
+    
+    # Labels for pull requests
+    pull_request_labels:
+      - "translations"
+      - "crowdin"
+      - "community"
+
+# Notification settings
+notifications:
+  # Notify on translation completion
+  on_translation_completion:
+    - type: "email"
+      recipients: ["maintainer@safeeats.app"]
+      
+  # Notify on new language completion
+  on_language_completion:
+    - type: "slack"
+      webhook_url_env: "SLACK_WEBHOOK_URL"
+      message: "🎉 New language completed in SafeEats: {language_name}"
+
+# Quality assurance
+qa:
+  # Check for placeholder consistency
+  check_placeholders: true
+  
+  # Check for translation length (prevent UI overflow)
+  check_length: true
+  max_length_ratio: 1.5
+  
+  # Check for HTML/markup consistency
+  check_markup: true
+  
+  # Spell checking
+  spell_check: true
+  
+# Export settings
+export:
+  # Skip untranslated strings
+  skip_untranslated_strings: false
+  
+  # Skip untranslated files
+  skip_untranslated_files: false
+  
+  # Export only approved translations
+  export_approved_only: false
+
+# Advanced settings
+advanced:
+  # Pseudo-localization for testing
+  pseudo_localization:
+    enabled: false
+    prefix: "["
+    suffix: "]"
+    
+  # Translation memory
+  translation_memory:
+    enabled: true
+    
+  # Machine translation
+  machine_translation:
+    enabled: false
+    provider: "google"
