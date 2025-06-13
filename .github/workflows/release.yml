@@ -20,6 +20,10 @@ on:
         default: false
         type: boolean
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -83,14 +87,13 @@ jobs:
         
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ steps.get_tag.outputs.tag_name }}
-        release_name: ${{ steps.get_tag.outputs.release_name }}
+        name: ${{ steps.get_tag.outputs.release_name }}
         draft: false
         prerelease: ${{ steps.get_tag.outputs.prerelease }}
+        generate_release_notes: true
         body: |
           ## 🚀 SafeEats Release ${{ steps.get_tag.outputs.tag_name }}
           
@@ -128,49 +131,11 @@ jobs:
           
           ### 🌍 Translations
           Help us translate SafeEats into your language! Check out our [translation guide](https://github.com/${{ github.repository }}/blob/l10n/CONTRIBUTING_TRANSLATIONS.md).
-
-    - name: Upload Universal APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/flutter-apk/safeeats-universal-release.apk
-        asset_name: safeeats-universal-release.apk
-        asset_content_type: application/vnd.android.package-archive
-
-    - name: Upload ARM64-v8a APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/flutter-apk/safeeats-arm64-v8a-release.apk
-        asset_name: safeeats-arm64-v8a-release.apk
-        asset_content_type: application/vnd.android.package-archive
-      continue-on-error: true
-
-    - name: Upload ARMv7a APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/flutter-apk/safeeats-armeabi-v7a-release.apk
-        asset_name: safeeats-armeabi-v7a-release.apk
-        asset_content_type: application/vnd.android.package-archive
-      continue-on-error: true
-
-    - name: Upload x86_64 APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/flutter-apk/safeeats-x86_64-release.apk
-        asset_name: safeeats-x86_64-release.apk
-        asset_content_type: application/vnd.android.package-archive
-      continue-on-error: true
+        files: |
+          build/app/outputs/flutter-apk/safeeats-universal-release.apk
+          build/app/outputs/flutter-apk/safeeats-arm64-v8a-release.apk
+          build/app/outputs/flutter-apk/safeeats-armeabi-v7a-release.apk
+          build/app/outputs/flutter-apk/safeeats-x86_64-release.apk
 
   build-ios:
     runs-on: macos-latest
@@ -214,31 +179,17 @@ jobs:
         cp -r Runner.app Payload/
         zip -r safeeats-ios-release.ipa Payload/
         
-    - name: Get release upload URL
-      id: get_release
+    - name: Get tag name for iOS upload
+      id: get_tag_ios
       run: |
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          TAG_NAME="${{ github.event.inputs.tag_name }}"
+          echo "tag_name=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
         else
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         fi
-        
-        RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG_NAME" | \
-          jq -r '.id')
-        
-        UPLOAD_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID" | \
-          jq -r '.upload_url')
-        
-        echo "upload_url=$UPLOAD_URL" >> $GITHUB_OUTPUT
 
-    - name: Upload iOS IPA
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload iOS IPA to Release
+      uses: softprops/action-gh-release@v1
       with:
-        upload_url: ${{ steps.get_release.outputs.upload_url }}
-        asset_path: build/ios/iphoneos/safeeats-ios-release.ipa
-        asset_name: safeeats-ios-release.ipa
-        asset_content_type: application/octet-stream
+        tag_name: ${{ steps.get_tag_ios.outputs.tag_name }}
+        files: build/ios/iphoneos/safeeats-ios-release.ipa
