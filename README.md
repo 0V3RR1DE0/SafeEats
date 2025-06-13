@@ -6,7 +6,7 @@
 
 **Scan. Check. Eat Safely.**
 
-[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/safeeats-universal-release.apk)
 [![Website](https://img.shields.io/badge/Website-eats.netique.lol-blue?style=for-the-badge&logo=google-chrome)](https://eats.netique.lol)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey?style=for-the-badge)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
