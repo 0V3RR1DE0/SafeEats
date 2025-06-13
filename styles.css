@@ -240,7 +240,7 @@ body {
 
 .hero-app-screenshot {
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
     height: auto;
     border-radius: var(--radius-xl);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
