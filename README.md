@@ -6,7 +6,7 @@
 
 **Scan. Check. Eat Safely.**
 
-[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/raw/releases/Android/SafeEats.apk)
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
 [![Website](https://img.shields.io/badge/Website-eats.netique.lol-blue?style=for-the-badge&logo=google-chrome)](https://eats.netique.lol)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey?style=for-the-badge)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
@@ -46,9 +46,9 @@ Visit our website at [eats.netique.lol](https://eats.netique.lol) for more infor
 ## 📊 Statistics
 
 - **50K+** Products in Database
-- **500+** Active Users
-- **99%** Accuracy Rate
-- **5+** Languages Supported
+- **v0.0.1-alpha** Current Version
+- **~31MB** App Size
+- **2** Languages Supported (English, Finnish)
 - **4.8/5** User Rating
 
 ## 🛠️ Technology Stack
@@ -70,7 +70,7 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 ## 🔗 Links
 
 - [Website](https://eats.netique.lol)
-- [Download APK](https://github.com/0V3RR1DE0/SafeEats/raw/releases/Android/SafeEats.apk)
+- [Download APK](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
 - [Report Issues](https://github.com/0V3RR1DE0/SafeEats/issues)
 - [Feature Requests](https://github.com/0V3RR1DE0/SafeEats/issues/new?template=feature_request.md)
 
