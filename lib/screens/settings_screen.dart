@@ -166,19 +166,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication, // Force external browser
-      );
-    } else {
-      // Show error if URL can't be launched
+    try {
+      final uri = Uri.parse(url);
+
+      // Try different launch modes
+      bool launched = false;
+
+      // First try external application
+      if (await canLaunchUrl(uri)) {
+        launched = await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+
+      // If that fails, try platform default
+      if (!launched && await canLaunchUrl(uri)) {
+        launched = await launchUrl(
+          uri,
+          mode: LaunchMode.platformDefault,
+        );
+      }
+
+      // If still not launched, show error
+      if (!launched) {
+        throw Exception('Could not launch $url');
+      }
+    } catch (e) {
+      print('Error launching URL: $e'); // Debug print
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Could not open $url'),
+            content: Text('Could not open $url\nError: ${e.toString()}'),
             backgroundColor: Colors.red,
+            duration: const Duration(seconds: 4),
           ),
         );
       }
@@ -391,29 +412,85 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.newVersionAvailable(_latestVersion ?? '')),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (_updateNotes != null) ...[
-              Text(_updateNotes!),
-              const SizedBox(height: 16),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_updateNotes != null && _updateNotes!.isNotEmpty) ...[
+                const Text(
+                  'What\'s New:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Scrollable container for changelog
+                Flexible(
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      maxHeight: 300, // Limit height to prevent overflow
+                    ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surfaceVariant
+                          .withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .outline
+                            .withOpacity(0.2),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(12),
+                      child: _buildChangelogContent(_updateNotes!),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+              // Version info
+              Row(
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Current: $_version → New: ${_latestVersion ?? 'Unknown'}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
             ],
-          ],
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(l10n.later),
           ),
-          FilledButton(
+          FilledButton.icon(
             onPressed: () {
               Navigator.of(context).pop();
               if (_updateUrl != null) {
                 _launchUrl(_updateUrl!);
               }
             },
-            child: Text(l10n.updateNow),
+            icon: const Icon(Icons.download, size: 18),
+            label: Text(l10n.updateNow),
           ),
         ],
       ),
@@ -529,6 +606,135 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: const Text('Download Page'),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildChangelogContent(String changelog) {
+    // Split changelog into lines for processing
+    final lines = changelog.split('\n');
+    final widgets = <Widget>[];
+
+    for (int i = 0; i < lines.length; i++) {
+      final line = lines[i].trim();
+
+      if (line.isEmpty) {
+        widgets.add(const SizedBox(height: 8));
+        continue;
+      }
+
+      // Handle headers (## Header or # Header)
+      if (line.startsWith('##')) {
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 4),
+            child: Text(
+              line.replaceFirst('##', '').trim(),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      } else if (line.startsWith('#')) {
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 6),
+            child: Text(
+              line.replaceFirst('#', '').trim(),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      }
+      // Handle bullet points (- item or * item)
+      else if (line.startsWith('- ') || line.startsWith('* ')) {
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(left: 8, bottom: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '• ',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    line.replaceFirst(RegExp(r'^[*-]\s*'), ''),
+                    style: const TextStyle(height: 1.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      // Handle bold text (**text**)
+      else if (line.contains('**')) {
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _buildTextWithBold(line),
+          ),
+        );
+      }
+      // Regular text
+      else {
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              line,
+              style: const TextStyle(height: 1.4),
+            ),
+          ),
+        );
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widgets,
+    );
+  }
+
+  Widget _buildTextWithBold(String text) {
+    final spans = <TextSpan>[];
+    final regex = RegExp(r'\*\*(.*?)\*\*');
+    int lastEnd = 0;
+
+    for (final match in regex.allMatches(text)) {
+      // Add text before the bold part
+      if (match.start > lastEnd) {
+        spans.add(TextSpan(text: text.substring(lastEnd, match.start)));
+      }
+
+      // Add bold text
+      spans.add(TextSpan(
+        text: match.group(1),
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ));
+
+      lastEnd = match.end;
+    }
+
+    // Add remaining text
+    if (lastEnd < text.length) {
+      spans.add(TextSpan(text: text.substring(lastEnd)));
+    }
+
+    return RichText(
+      text: TextSpan(
+        children: spans,
+        style: DefaultTextStyle.of(context).style.copyWith(height: 1.4),
       ),
     );
   }
