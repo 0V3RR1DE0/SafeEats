@@ -3,184 +3,582 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Downloading SafeEats APK...</title>
-  <meta name="description" content="Automatically downloading the latest SafeEats APK for Android">
+  <title>Download SafeEats - Food Restriction Scanner</title>
+  <meta name="description" content="Download SafeEats APK for Android or IPA for iOS. Multiple architecture options available.">
   <link rel="stylesheet" href="../styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     .download-page {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       background: var(--surface);
-      padding: 2rem;
+      padding: 120px 0 80px;
     }
     
     .download-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    .download-header {
       text-align: center;
-      max-width: 500px;
-      background: var(--surface-container);
-      padding: 3rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .download-icon {
-      font-size: 4rem;
-      color: var(--primary);
-      margin-bottom: 1rem;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      margin-bottom: 3rem;
     }
     
     .download-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      margin-bottom: 1rem;
+    }
+    
+    .download-subtitle {
+      color: var(--on-surface-variant);
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+    
+    .platform-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--outline);
+      background: transparent;
+      color: var(--on-surface-variant);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .tab-btn.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    
+    .tab-btn:hover:not(.active) {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .platform-content {
+      display: none;
+    }
+    
+    .platform-content.active {
+      display: block;
+    }
+    
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .download-card {
+      background: var(--surface-container);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--outline-variant);
+      transition: all 0.2s;
+    }
+    
+    .download-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-container);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--on-primary-container);
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    
+    .card-subtitle {
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      margin: 0;
+    }
+    
+    .card-description {
+      color: var(--on-surface-variant);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    
+    .download-btn {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    
+    .download-btn:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    
+    .download-btn:disabled {
+      background: var(--surface-variant);
+      color: var(--on-surface-variant);
+      cursor: not-allowed;
+    }
+    
+    .status-message {
+      text-align: center;
+      padding: 1rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .status-loading {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    
+    .status-error {
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+    
+    .status-success {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+    }
+    
+    .installation-guide {
+      background: var(--surface-container);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .guide-title {
       font-size: 1.5rem;
       font-weight: 600;
       color: var(--on-surface);
       margin-bottom: 1rem;
     }
     
-    .download-status {
+    .guide-steps {
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .guide-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: var(--on-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    
+    .step-content h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--on-surface);
+    }
+    
+    .step-content p {
+      margin: 0;
       color: var(--on-surface-variant);
-      margin-bottom: 2rem;
+      line-height: 1.5;
     }
     
-    .manual-download {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--outline-variant);
-    }
-    
-    .btn {
+    .back-link {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--primary);
-      color: var(--on-primary);
+      color: var(--on-surface-variant);
       text-decoration: none;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: background-color 0.2s;
+      margin-top: 2rem;
+      transition: color 0.2s;
     }
     
-    .btn:hover {
-      background: var(--primary-container);
-      color: var(--on-primary-container);
+    .back-link:hover {
+      color: var(--primary);
     }
     
-    .error-message {
-      color: var(--error);
-      margin-top: 1rem;
+    @media (max-width: 768px) {
+      .download-page {
+        padding: 100px 0 60px;
+      }
+      
+      .download-title {
+        font-size: 2rem;
+      }
+      
+      .platform-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .download-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .installation-guide {
+        padding: 1.5rem;
+      }
     }
   </style>
-  <script>
-    let downloadStarted = false;
-    
-    function updateStatus(message) {
-      document.getElementById('status').textContent = message;
-    }
-    
-    function showError(message) {
-      document.getElementById('error').textContent = message;
-      document.getElementById('error').style.display = 'block';
-      document.getElementById('manual-download').style.display = 'block';
-    }
-    
-    function startDownload() {
-      if (downloadStarted) return;
-      downloadStarted = true;
-      
-      updateStatus('Fetching latest release information...');
-      
-      fetch("https://api.github.com/repos/0V3RR1DE0/SafeEats/releases/latest")
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to fetch release data');
-          return res.json();
-        })
-        .then(data => {
-          updateStatus('Looking for APK file...');
-          
-          // Look for the universal APK
-          const asset = data.assets.find(a => 
-            a.name === "safeeats-universal-release.apk" || 
-            a.name.includes("universal") || 
-            a.name.includes("release.apk")
-          );
-          
-          if (asset) {
-            updateStatus('Starting download...');
-            
-            // Track download
-            if (typeof gtag !== 'undefined') {
-              gtag('event', 'download', {
-                'event_category': 'engagement',
-                'event_label': 'auto-redirect',
-                'value': 1
-              });
-            }
-            
-            // Redirect to download
-            window.location.href = asset.browser_download_url;
-            
-            // Show success message after a delay
-            setTimeout(() => {
-              updateStatus('Download should have started! If not, use the manual download below.');
-              document.getElementById('manual-download').style.display = 'block';
-            }, 3000);
-            
-          } else {
-            throw new Error('APK file not found in latest release');
-          }
-        })
-        .catch(error => {
-          console.error('Download error:', error);
-          showError('Error: ' + error.message);
-        });
-    }
-    
-    // Start download when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      // Small delay to show the loading state
-      setTimeout(startDownload, 1000);
-    });
-  </script>
 </head>
 <body>
   <div class="download-page">
     <div class="download-container">
-      <div class="download-icon">
-        <span class="material-icons">download</span>
+      <div class="download-header">
+        <h1 class="download-title">Download SafeEats</h1>
+        <p class="download-subtitle">Choose your platform and architecture for the best experience</p>
+        
+        <div class="platform-tabs">
+          <button class="tab-btn active" data-platform="android">
+            <span class="material-icons">android</span>
+            Android
+          </button>
+          <button class="tab-btn" data-platform="ios">
+            <span class="material-icons">apple</span>
+            iOS
+          </button>
+        </div>
       </div>
       
-      <h1 class="download-title">Downloading SafeEats</h1>
+      <div id="status" class="status-message"></div>
       
-      <p id="status" class="download-status">
-        Preparing download...
-      </p>
-      
-      <div id="error" class="error-message" style="display: none;"></div>
-      
-      <div id="manual-download" class="manual-download" style="display: none;">
-        <p>If the download didn't start automatically:</p>
-        <a href="https://github.com/0V3RR1DE0/SafeEats/releases/latest" class="btn">
-          <span class="material-icons">open_in_new</span>
-          Go to Releases Page
-        </a>
+      <!-- Android Platform -->
+      <div id="android-content" class="platform-content active">
+        <div class="download-grid" id="android-downloads">
+          <!-- Downloads will be populated by JavaScript -->
+        </div>
+        
+        <div class="installation-guide">
+          <h3 class="guide-title">Android Installation Guide</h3>
+          <div class="guide-steps">
+            <div class="guide-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Enable Unknown Sources</h4>
+                <p>Go to Settings → Security → Install unknown apps and enable installation from your browser or file manager.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Download APK</h4>
+                <p>Choose the appropriate APK for your device. Universal APK works on all devices but may be larger.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Install & Launch</h4>
+                <p>Open the downloaded APK file, tap Install, and launch SafeEats to start scanning products safely.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
-      <div style="margin-top: 2rem;">
-        <a href="../index.html" style="color: var(--on-surface-variant); text-decoration: none;">
-          ← Back to SafeEats Website
-        </a>
+      <!-- iOS Platform -->
+      <div id="ios-content" class="platform-content">
+        <div class="download-grid" id="ios-downloads">
+          <!-- Downloads will be populated by JavaScript -->
+        </div>
+        
+        <div class="installation-guide">
+          <h3 class="guide-title">iOS Installation Guide</h3>
+          <div class="guide-steps">
+            <div class="guide-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Download IPA File</h4>
+                <p>Download the SafeEats IPA file to your computer or directly to your iOS device.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Install with AltStore or Sideloadly</h4>
+                <p>Use AltStore, Sideloadly, or similar tools to sideload the IPA file onto your iOS device. You'll need an Apple ID.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Trust Developer</h4>
+                <p>Go to Settings → General → VPN & Device Management → Trust the developer certificate for SafeEats.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Launch App</h4>
+                <p>SafeEats should now appear on your home screen. Launch it to start scanning products safely!</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      
+      <a href="../index.html" class="back-link">
+        <span class="material-icons">arrow_back</span>
+        Back to SafeEats Website
+      </a>
     </div>
   </div>
+
+  <script>
+    let releases = null;
+    let totalDownloads = 0;
+    
+    // Device detection
+    function detectPlatform() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      if (/iphone|ipad|ipod/.test(userAgent)) return 'ios';
+      if (/android/.test(userAgent)) return 'android';
+      if (/windows/.test(userAgent)) return 'android'; // Show Android for Windows
+      if (/linux/.test(userAgent)) return 'android'; // Show Android for Linux
+      return 'android'; // Default to Android
+    }
+    
+    // Initialize platform selection
+    function initializePlatform() {
+      const detectedPlatform = detectPlatform();
+      const tabs = document.querySelectorAll('.tab-btn');
+      const contents = document.querySelectorAll('.platform-content');
+      
+      // Set active platform
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.platform === detectedPlatform);
+      });
+      
+      contents.forEach(content => {
+        content.classList.toggle('active', content.id === `${detectedPlatform}-content`);
+      });
+    }
+    
+    // Platform tab switching
+    function setupTabs() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const contents = document.querySelectorAll('.platform-content');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const platform = tab.dataset.platform;
+          
+          tabs.forEach(t => t.classList.remove('active'));
+          contents.forEach(c => c.classList.remove('active'));
+          
+          tab.classList.add('active');
+          document.getElementById(`${platform}-content`).classList.add('active');
+        });
+      });
+    }
+    
+    // Show status message
+    function showStatus(message, type = 'loading') {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status-message status-${type}`;
+      status.style.display = 'block';
+    }
+    
+    // Hide status message
+    function hideStatus() {
+      document.getElementById('status').style.display = 'none';
+    }
+    
+    // Create download card
+    function createDownloadCard(asset, type, description, icon = 'android') {
+      const sizeInMB = (asset.size / (1024 * 1024)).toFixed(1);
+      
+      return `
+        <div class="download-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <span class="material-icons">${icon}</span>
+            </div>
+            <div>
+              <h3 class="card-title">${type}</h3>
+              <p class="card-subtitle">${sizeInMB} MB</p>
+            </div>
+          </div>
+          <p class="card-description">${description}</p>
+          <a href="${asset.browser_download_url}" class="download-btn" onclick="trackDownload('${asset.name}')">
+            <span class="material-icons">download</span>
+            Download
+          </a>
+        </div>
+      `;
+    }
+    
+    // Populate downloads
+    function populateDownloads() {
+      if (!releases || !releases.assets) return;
+      
+      const androidContainer = document.getElementById('android-downloads');
+      const iosContainer = document.getElementById('ios-downloads');
+      
+      let androidCards = '';
+      let iosCards = '';
+      
+      releases.assets.forEach(asset => {
+        if (asset.name.includes('.apk')) {
+          let type, description;
+          
+          if (asset.name.includes('universal')) {
+            type = 'Universal APK';
+            description = 'Works on all Android devices. Larger file size but maximum compatibility.';
+          } else if (asset.name.includes('arm64-v8a')) {
+            type = 'ARM64 APK';
+            description = 'Optimized for modern 64-bit ARM devices. Recommended for most phones.';
+          } else if (asset.name.includes('armeabi-v7a')) {
+            type = 'ARMv7 APK';
+            description = 'For older 32-bit ARM devices. Use if ARM64 version doesn\'t work.';
+          } else if (asset.name.includes('x86_64')) {
+            type = 'x86_64 APK';
+            description = 'For Intel/AMD 64-bit devices, emulators, and some tablets.';
+          } else {
+            type = 'Android APK';
+            description = 'SafeEats for Android devices.';
+          }
+          
+          androidCards += createDownloadCard(asset, type, description, 'android');
+        } else if (asset.name.includes('.ipa')) {
+          iosCards += createDownloadCard(asset, 'iOS IPA', 'SafeEats for iOS devices. Requires sideloading.', 'apple');
+        }
+      });
+      
+      if (androidCards) {
+        androidContainer.innerHTML = androidCards;
+      } else {
+        androidContainer.innerHTML = '<p style="text-align: center; color: var(--on-surface-variant);">No Android releases found.</p>';
+      }
+      
+      if (iosCards) {
+        iosContainer.innerHTML = iosCards;
+      } else {
+        iosContainer.innerHTML = '<p style="text-align: center; color: var(--on-surface-variant);">No iOS releases found.</p>';
+      }
+    }
+    
+    // Fetch releases
+    async function fetchReleases() {
+      try {
+        showStatus('Fetching latest releases...');
+        
+        const response = await fetch('https://api.github.com/repos/0V3RR1DE0/SafeEats/releases/latest');
+        if (!response.ok) throw new Error('Failed to fetch releases');
+        
+        releases = await response.json();
+        
+        // Calculate total downloads
+        totalDownloads = releases.assets.reduce((sum, asset) => sum + asset.download_count, 0);
+        
+        populateDownloads();
+        hideStatus();
+        
+        // Update page title with download count
+        if (totalDownloads > 0) {
+          document.title = `Download SafeEats (${totalDownloads} downloads)`;
+        }
+        
+      } catch (error) {
+        console.error('Error fetching releases:', error);
+        showStatus('Error loading releases. Please try again later or visit our GitHub page.', 'error');
+        
+        // Show fallback GitHub link
+        document.getElementById('android-downloads').innerHTML = `
+          <div class="download-card">
+            <div class="card-header">
+              <div class="card-icon">
+                <span class="material-icons">open_in_new</span>
+              </div>
+              <div>
+                <h3 class="card-title">GitHub Releases</h3>
+                <p class="card-subtitle">Manual Download</p>
+              </div>
+            </div>
+            <p class="card-description">Visit our GitHub releases page to download the latest version manually.</p>
+            <a href="https://github.com/0V3RR1DE0/SafeEats/releases/latest" class="download-btn">
+              <span class="material-icons">open_in_new</span>
+              Open GitHub
+            </a>
+          </div>
+        `;
+      }
+    }
+    
+    // Track downloads
+    function trackDownload(filename) {
+      // Track with Google Analytics if available
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'download', {
+          'event_category': 'engagement',
+          'event_label': filename,
+          'value': 1
+        });
+      }
+      
+      console.log(`Download tracked: ${filename}`);
+    }
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      initializePlatform();
+      setupTabs();
+      fetchReleases();
+    });
+  </script>
 </body>
 </html>
