@@ -7,7 +7,7 @@
 **Scan. Check. Eat Safely.**
 
 [![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/raw/releases/Android/SafeEats.apk)
-[![Website](https://img.shields.io/badge/Website-safeeats.netique.lol-blue?style=for-the-badge&logo=google-chrome)](https://safeeats.netique.lol)
+[![Website](https://img.shields.io/badge/Website-eats.netique.lol-blue?style=for-the-badge&logo=google-chrome)](https://eats.netique.lol)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey?style=for-the-badge)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 [![GitHub Downloads](https://img.shields.io/github/downloads/0V3RR1DE0/SafeEats/total?style=flat-square&logo=github&label=Total%20Downloads)](https://github.com/0V3RR1DE0/SafeEats/releases)
@@ -41,7 +41,7 @@ Coming soon! We're working on bringing SafeEats to the App Store.
 
 ## 🌐 Website
 
-Visit our website at [safeeats.netique.lol](https://safeeats.netique.lol) for more information, features overview, and easy download access.
+Visit our website at [eats.netique.lol](https://eats.netique.lol) for more information, features overview, and easy download access.
 
 ## 📊 Statistics
 
@@ -69,7 +69,7 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 
 ## 🔗 Links
 
-- [Website](https://safeeats.netique.lol)
+- [Website](https://eats.netique.lol)
 - [Download APK](https://github.com/0V3RR1DE0/SafeEats/raw/releases/Android/SafeEats.apk)
 - [Report Issues](https://github.com/0V3RR1DE0/SafeEats/issues)
 - [Feature Requests](https://github.com/0V3RR1DE0/SafeEats/issues/new?template=feature_request.md)

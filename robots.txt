@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://safeeats.netique.lol/sitemap.xml
+Sitemap: https://eats.netique.lol/sitemap.xml
