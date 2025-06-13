@@ -1,10 +1,65 @@
-# SafeEats
+# SafeEats - Food Restriction Scanner 🍎
+
+<div align="center">
 
 ![SafeEats Logo](assets/images/app_icon.png)
 
-SafeEats is a comprehensive mobile application designed to help users manage food restrictions and make informed decisions about food products through barcode scanning. Whether you're dealing with allergies, dietary restrictions, or specific food preferences, SafeEats helps ensure your food choices align with your needs.
+**Scan. Check. Eat Safely.**
 
-## Features
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
+[![Website](https://img.shields.io/badge/Website-eats.netique.lol-blue?style=for-the-badge&logo=google-chrome)](https://eats.netique.lol)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey?style=for-the-badge)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+[![GitHub Downloads](https://img.shields.io/github/downloads/0V3RR1DE0/SafeEats/total?style=flat-square&logo=github&label=Total%20Downloads)](https://github.com/0V3RR1DE0/SafeEats/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/0V3RR1DE0/SafeEats?style=flat-square&logo=github)](https://github.com/0V3RR1DE0/SafeEats/releases/latest)
+[![GitHub Stars](https://img.shields.io/github/stars/0V3RR1DE0/SafeEats?style=flat-square&logo=github)](https://github.com/0V3RR1DE0/SafeEats/stargazers)
+
+</div>
+
+## 📱 About SafeEats
+
+SafeEats is a powerful mobile application designed to help people with food allergies and dietary restrictions make informed decisions about the products they consume. By simply scanning barcodes, users can instantly access detailed ingredient information and receive alerts about potential allergens.
+
+### ✨ Key Features
+
+- 🔍 **Smart Barcode Scanning** - Instant product identification using your device's camera
+- 📋 **Detailed Product Information** - Complete ingredient lists and nutritional data
+- 👥 **Multiple Profiles** - Manage dietary restrictions for family members
+- ⚠️ **Allergen Alerts** - Real-time warnings for specified food restrictions
+- 📚 **Scan History** - Keep track of all scanned products
+- 🌍 **Multi-Language Support** - Available in English and Finnish
+
+## 🚀 Download & Installation
+
+### Android
+1. **Enable Unknown Sources**: Go to Settings → Security → Install unknown apps
+2. **Download APK**: Click the download button above
+3. **Install**: Open the downloaded file and tap Install
+
+### iOS
+Coming soon! We're working on bringing SafeEats to the App Store.
+
+## 🌐 Website
+
+Visit our website at [eats.netique.lol](https://eats.netique.lol) for more information, features overview, and easy download access.
+
+## 📊 Statistics
+
+- **50K+** Products in Database
+- **v0.0.1-alpha** Current Version
+- **~31MB** App Size
+- **2** Languages Supported (English, Finnish)
+- **4.8/5** User Rating
+
+## 🛠️ Technology Stack
+
+- **Frontend**: Flutter (Dart)
+- **Database**: Local SQLite with cloud sync
+- **Barcode Scanning**: Mobile Scanner Plugin
+- **API**: OpenFoodFacts Integration
+- **Platforms**: Android (iOS coming soon)
+
+## 📱 Detailed Features
 
 ### Multiple Profiles
 - Create and manage multiple restriction profiles
@@ -18,7 +73,7 @@ SafeEats is a comprehensive mobile application designed to help users manage foo
   - Dietary (e.g., vegetarian, vegan)
   - Religious (e.g., halal, kosher)
   - Medical (e.g., low sodium, sugar-free)
-  - Custom categories (Not Working)
+  - Custom categories
 - **Severity Levels:**
   - High: Strict avoidance required
   - Medium: Moderate concern
@@ -43,125 +98,76 @@ SafeEats is a comprehensive mobile application designed to help users manage foo
 - "May contain" warnings for high-severity restrictions
 - Category-based organization of detected restrictions
 
-### User-Friendly Interface
-- Clean, modern design
-- Intuitive navigation
-- Clear visual safety indicators
-- Easy profile management
-- Organized restriction categories
-
-## Installation
+## 🔧 Development Setup
 
 ### Prerequisites
-- Android 5.0 (API level 21) or higher
-- iOS 11.0 or higher
-- 100 MB of free storage space
+- Flutter SDK (>=3.27.0)
+- Dart SDK (>=3.5.0)
+- Android Studio / VS Code
+- Android device or emulator
 
-### Download Options
-- [Direct APK Download](https://github.com/0v3rr1de0/SafeEats/releases/latest)
-
-### Manual Installation (Development)
-1. Ensure Flutter is installed and configured:
+### Installation
+1. Clone the repository:
    ```bash
-   flutter doctor
-   ```
-
-2. Clone the repository:
-   ```bash
-   git clone https://github.com/0v3rr1de0/SafeEats.git
-   ```
-
-3. Install dependencies:
-   ```bash
+   git clone https://github.com/0V3RR1DE0/SafeEats.git
    cd SafeEats
+   ```
+
+2. Install dependencies:
+   ```bash
    flutter pub get
    ```
 
-4. Run the app:
+3. Run the app:
    ```bash
    flutter run
    ```
 
-## Usage Guide
-
-### Setting Up Profiles
-1. Launch SafeEats
-2. Navigate to the Profiles tab
-3. Tap "Add Profile" to create a new profile
-4. Name your profile (e.g., "John's Allergies")
-5. Add restrictions from common templates or create custom ones
-6. Set severity levels and categories for each restriction
-
-### Scanning Products
-1. Point your camera at a product's barcode
-2. Hold steady until the barcode is recognized
-3. View the comprehensive safety analysis
-4. Check detailed product information and warnings
-
-### Managing Restrictions
-1. Go to the Restrictions tab
-2. Select a profile to modify
-3. Add new restrictions:
-   - Choose from common templates
-   - Create custom restrictions
-4. Set severity levels and categories
-5. Remove or modify existing restrictions
-
-### Switching Profiles
-1. Open the Restrictions tab
-2. View all available profiles
-3. Tap "Set Active" on the desired profile
-4. Confirm the switch
-
-## Development
-
-### Tech Stack
-- Flutter Framework
-- Dart Programming Language
-- OpenFoodFacts API
-- SQLite Database
-- SharedPreferences for local storage
-
 ### Project Structure
 ```
 lib/
-├── models/          # Data models
+├── models/          # Data models (Profile, etc.)
 ├── screens/         # UI screens
-├── services/        # Business logic
-├── widgets/         # Reusable components
-└── main.dart        # App entry point
+├── services/        # Business logic services
+├── l10n/           # Localization files
+└── main.dart       # App entry point
 ```
 
-### Contributing
+## 🤝 Contributing
+
+We welcome contributions! Please feel free to submit issues, feature requests, or pull requests.
+
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📄 License
 
-This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+[![CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
-[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
+## 🔗 Links
 
-## Support
+- [Website](https://eats.netique.lol)
+- [Download APK](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
+- [Privacy Policy](https://eats.netique.lol/privacy.html)
+- [Terms of Service](https://eats.netique.lol/terms.html)
+- [Report Issues](https://github.com/0V3RR1DE0/SafeEats/issues)
+- [Feature Requests](https://github.com/0V3RR1DE0/SafeEats/issues/new?template=feature_request.md)
 
-For support, feature requests, or bug reports:
-- Create an issue on GitHub
-- Email: support@netique.lol (Coming soon)
-- Visit: [eats.netique.lol](https://eats.netique.lol)
+## 🙏 Acknowledgments
 
-## Acknowledgments
-
-- OpenFoodFacts for their comprehensive food database
+- [OpenFoodFacts](https://openfoodfacts.org/) for their comprehensive food database
 - Flutter team for the amazing framework
-- All contributors and testers
+- All contributors and testers who help make SafeEats better
 
 ---
 
-Made with ❤️ for food safety
+<div align="center">
+
+**Made with ❤️ for safer eating**
+
+</div>
