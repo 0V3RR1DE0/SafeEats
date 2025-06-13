@@ -46,7 +46,7 @@ Visit our website at [eats.netique.lol](https://eats.netique.lol) for more infor
 ## 📊 Statistics
 
 - **50K+** Products in Database
-- **v1.0.0-beta+5** Current Version
+- ![GitHub Release](https://img.shields.io/github/v/release/0V3RR1DE0/SafeEats?label=Current%20Version&style=flat-square) Current Version
 - **~31MB** App Size
 - **2** Languages Supported (English, Finnish)
 

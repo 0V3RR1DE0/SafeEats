@@ -1,0 +1,85 @@
+name: Sync README to All Branches
+
+on:
+  push:
+    branches: [main]
+    paths: ['README.md']
+  workflow_dispatch:
+    inputs:
+      target_branches:
+        description: 'Comma-separated list of branches to sync to (leave empty for all branches)'
+        required: false
+        default: ''
+
+jobs:
+  sync-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Get all branches (excluding localization branches)
+        id: get_branches
+        run: |
+          if [ -n "${{ github.event.inputs.target_branches }}" ]; then
+            # Use manually specified branches
+            echo "branches=${{ github.event.inputs.target_branches }}" >> $GITHUB_OUTPUT
+          else
+            # Get all remote branches except main and localization branches
+            branches=$(git branch -r | grep -v 'origin/HEAD' | grep -v 'origin/main' | grep -v 'origin/l10n' | sed 's/origin\///' | tr '\n' ',' | sed 's/,$//')
+            echo "branches=$branches" >> $GITHUB_OUTPUT
+            echo "Found branches to sync: $branches"
+          fi
+
+      - name: Sync README to branches
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Get the current README content from main
+          README_CONTENT=$(cat README.md)
+          
+          # Convert comma-separated branches to array
+          IFS=',' read -ra BRANCH_ARRAY <<< "${{ steps.get_branches.outputs.branches }}"
+          
+          echo "Starting README sync process..."
+          
+          for branch in "${BRANCH_ARRAY[@]}"; do
+            branch=$(echo "$branch" | xargs) # trim whitespace
+            
+            # Skip empty branches and localization branches
+            if [ -n "$branch" ] && [ "$branch" != "main" ] && [[ "$branch" != *"l10n"* ]]; then
+              echo "🔄 Processing branch: $branch"
+              
+              # Check if branch exists
+              if git show-ref --verify --quiet refs/remotes/origin/$branch; then
+                git checkout $branch
+                
+                # Update README with content from main
+                echo "$README_CONTENT" > README.md
+                
+                # Check if there are changes
+                if ! git diff --quiet README.md; then
+                  git add README.md
+                  git commit -m "Sync README from main branch [skip ci]"
+                  git push origin $branch
+                  echo "✅ README synced to $branch"
+                else
+                  echo "ℹ️ No changes needed for $branch"
+                fi
+              else
+                echo "⚠️ Branch $branch does not exist, skipping"
+              fi
+            else
+              if [[ "$branch" == *"l10n"* ]]; then
+                echo "🌍 Skipping localization branch: $branch"
+              fi
+            fi
+          done
+          
+          # Return to main branch
+          git checkout main
+          echo "🎉 README sync process completed!"
