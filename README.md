@@ -6,7 +6,7 @@
 
 **Scan. Check. Eat Safely.**
 
-[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK-green?style=for-the-badge&logo=android)](https://eats.netique.lol/download/)
 [![Website](https://img.shields.io/badge/Website-eats.netique.lol-blue?style=for-the-badge&logo=google-chrome)](https://eats.netique.lol)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey?style=for-the-badge)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
@@ -37,7 +37,7 @@ SafeEats is a powerful mobile application designed to help people with food alle
 3. **Install**: Open the downloaded file and tap Install
 
 ### iOS
-Coming soon! We're working on bringing SafeEats to the App Store.
+iOS version is available! Check the [releases page](https://github.com/0V3RR1DE0/SafeEats/releases) for the latest iOS build.
 
 ## 🌐 Website
 
@@ -46,18 +46,17 @@ Visit our website at [eats.netique.lol](https://eats.netique.lol) for more infor
 ## 📊 Statistics
 
 - **50K+** Products in Database
-- **v0.0.1-alpha** Current Version
+- **v1.0.0-beta** Current Version
 - **~31MB** App Size
 - **2** Languages Supported (English, Finnish)
-- **4.8/5** User Rating
 
 ## 🛠️ Technology Stack
 
 - **Frontend**: Flutter (Dart)
-- **Database**: Local SQLite with cloud sync
+- **Database**: Local SQLite storage
 - **Barcode Scanning**: Mobile Scanner Plugin
 - **API**: OpenFoodFacts Integration
-- **Platforms**: Android (iOS coming soon)
+- **Platforms**: Android & iOS
 
 ## 📱 Detailed Features
 
@@ -73,7 +72,7 @@ Visit our website at [eats.netique.lol](https://eats.netique.lol) for more infor
   - Dietary (e.g., vegetarian, vegan)
   - Religious (e.g., halal, kosher)
   - Medical (e.g., low sodium, sugar-free)
-  - Custom categories
+  - Custom categories (currently not supported)
 - **Severity Levels:**
   - High: Strict avoidance required
   - Medium: Moderate concern
@@ -152,7 +151,7 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 ## 🔗 Links
 
 - [Website](https://eats.netique.lol)
-- [Download APK](https://github.com/0V3RR1DE0/SafeEats/releases/download/latest/app-release.apk)
+- [Download APK](https://eats.netique.lol/download/)
 - [Privacy Policy](https://eats.netique.lol/privacy.html)
 - [Terms of Service](https://eats.netique.lol/terms.html)
 - [Report Issues](https://github.com/0V3RR1DE0/SafeEats/issues)
