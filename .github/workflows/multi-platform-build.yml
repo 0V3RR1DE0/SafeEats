@@ -2,7 +2,7 @@ name: Multi-Platform Build
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, dev ]  # Changed from 'develop' to 'dev'
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -60,6 +60,16 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '17'
+        
+    # Generate debug keystore for release builds
+    - name: Generate debug keystore
+      if: matrix.build-type == 'release'
+      run: |
+        mkdir -p ~/.android
+        keytool -genkey -v -keystore ~/.android/debug.keystore \
+          -storepass android -alias androiddebugkey -keypass android \
+          -keyalg RSA -keysize 2048 -validity 10000 \
+          -dname "CN=Android Debug,O=Android,C=US"
         
     - name: Install dependencies
       run: flutter pub get
@@ -143,12 +153,10 @@ jobs:
         pod install
         
     - name: Build iOS (Debug)
-      run: |
-        flutter build ios --debug --no-codesign
+      run: flutter build ios --debug --no-codesign
         
     - name: Build iOS (Release - unsigned)
-      run: |
-        flutter build ios --release --no-codesign
+      run: flutter build ios --release --no-codesign
         
     - name: Create iOS IPA (installable package)
       run: |
@@ -197,3 +205,4 @@ jobs:
         echo "- **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
         echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **FOSS Ready**: No Google Play Services required" >> $GITHUB_STEP_SUMMARY

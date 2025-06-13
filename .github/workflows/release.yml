@@ -46,6 +46,15 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
         
+    # Generate debug keystore for consistent signing
+    - name: Generate debug keystore
+      run: |
+        mkdir -p ~/.android
+        keytool -genkey -v -keystore ~/.android/debug.keystore \
+          -storepass android -alias androiddebugkey -keypass android \
+          -keyalg RSA -keysize 2048 -validity 10000 \
+          -dname "CN=Android Debug,O=Android,C=US"
+        
     - name: Install dependencies
       run: flutter pub get
       
@@ -100,37 +109,52 @@ jobs:
           ### 📱 Download Options
           
           #### 🤖 Android
-          - **Universal APK**: Works on all Android devices
-          - **ARM64-v8a APK**: Optimized for modern 64-bit ARM devices (recommended for most phones)
+          - **Universal APK**: Works on all Android devices (recommended for most users)
+          - **ARM64-v8a APK**: Optimized for modern 64-bit ARM devices (most phones)
           - **ARMv7a APK**: For older 32-bit ARM devices
           - **x86_64 APK**: For Intel/AMD 64-bit devices (emulators, some tablets)
+          - **iOS IPA**: For iOS devices (requires sideloading)
           
           ### 🔧 Installation Instructions
           
           #### Android
-          1. Download the appropriate APK for your device
+          1. Download the **Universal APK** (works on all devices)
           2. Enable "Install from unknown sources" in your device settings
           3. Open the downloaded APK file to install
           
+          #### iOS
+          1. Download the IPA file
+          2. Use AltStore, Sideloadly, or similar tools to sideload
+          3. Or use Xcode for development installation
+          
           ### ✨ What's New
           - Enhanced food safety checking with better ingredient parsing
-          - Improved allergen detection (now catches palm oil variations)
+          - Improved allergen detection (catches palm oil variations)
           - Professional dark mode with theme switching
           - Scan history with persistent storage
           - Multi-language support (English, Finnish)
           - Better user interface and navigation
+          - FOSS-friendly build (no Google Play Services required)
           
           ### 🛠️ Technical Details
           - **Flutter Version**: 3.27.0
           - **Minimum Android**: API 21 (Android 5.0)
-          - **Target Android**: API 34 (Android 14)
+          - **Target Android**: API 35 (Android 15)
           - **Architecture Support**: ARM64, ARMv7, x86_64
+          - **Signing**: Debug keystore (allows easy updates)
           
           ### 🐛 Bug Reports
           Found an issue? Please report it on our [GitHub Issues](https://github.com/${{ github.repository }}/issues) page.
           
           ### 🌍 Translations
-          Help us translate SafeEats into your language! Check out our [translation guide](https://github.com/${{ github.repository }}/blob/l10n/CONTRIBUTING_TRANSLATIONS.md).
+          Help us translate SafeEats into your language! Check out our [translation guide](https://github.com/${{ github.repository }}/blob/main/CONTRIBUTING.md).
+          
+          ### 📦 FOSS Distribution
+          This app is built without Google Play Services and works on all Android devices, including:
+          - Devices without Google services
+          - Custom ROMs (LineageOS, GrapheneOS, etc.)
+          - Amazon Fire tablets
+          - Available for F-Droid submission
         files: |
           build/app/outputs/flutter-apk/safeeats-universal-release.apk
           build/app/outputs/flutter-apk/safeeats-arm64-v8a-release.apk
