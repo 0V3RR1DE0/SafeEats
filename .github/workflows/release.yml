@@ -1,0 +1,244 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v1.0.0, v2.1.3, etc.
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      release_name:
+        description: 'Release name'
+        required: true
+        default: 'SafeEats Release'
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    name: Build Apps and Create Release
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Analyze code (allow warnings)
+      run: flutter analyze --no-fatal-infos || echo "Analysis completed with warnings"
+      
+    - name: Run tests
+      run: flutter test
+      
+    - name: Build Android Universal APK (Release)
+      run: flutter build apk --release
+      
+    - name: Build Android Architecture-specific APKs (Release)
+      run: flutter build apk --release --split-per-abi
+      
+    - name: Rename Android APK files
+      run: |
+        cd build/app/outputs/flutter-apk/
+        mv app-release.apk safeeats-universal-release.apk
+        [ -f app-arm64-v8a-release.apk ] && mv app-arm64-v8a-release.apk safeeats-arm64-v8a-release.apk
+        [ -f app-armeabi-v7a-release.apk ] && mv app-armeabi-v7a-release.apk safeeats-armeabi-v7a-release.apk
+        [ -f app-x86_64-release.apk ] && mv app-x86_64-release.apk safeeats-x86_64-release.apk
+        
+    - name: Get tag name
+      id: get_tag
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "tag_name=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+          echo "release_name=${{ github.event.inputs.release_name }}" >> $GITHUB_OUTPUT
+          echo "prerelease=${{ github.event.inputs.prerelease }}" >> $GITHUB_OUTPUT
+        else
+          echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "release_name=SafeEats ${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "prerelease=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.get_tag.outputs.tag_name }}
+        release_name: ${{ steps.get_tag.outputs.release_name }}
+        draft: false
+        prerelease: ${{ steps.get_tag.outputs.prerelease }}
+        body: |
+          ## 🚀 SafeEats Release ${{ steps.get_tag.outputs.tag_name }}
+          
+          ### 📱 Download Options
+          
+          #### 🤖 Android
+          - **Universal APK**: Works on all Android devices
+          - **ARM64-v8a APK**: Optimized for modern 64-bit ARM devices (recommended for most phones)
+          - **ARMv7a APK**: For older 32-bit ARM devices
+          - **x86_64 APK**: For Intel/AMD 64-bit devices (emulators, some tablets)
+          
+          ### 🔧 Installation Instructions
+          
+          #### Android
+          1. Download the appropriate APK for your device
+          2. Enable "Install from unknown sources" in your device settings
+          3. Open the downloaded APK file to install
+          
+          ### ✨ What's New
+          - Enhanced food safety checking with better ingredient parsing
+          - Improved allergen detection (now catches palm oil variations)
+          - Professional dark mode with theme switching
+          - Scan history with persistent storage
+          - Multi-language support (English, Finnish)
+          - Better user interface and navigation
+          
+          ### 🛠️ Technical Details
+          - **Flutter Version**: 3.27.0
+          - **Minimum Android**: API 21 (Android 5.0)
+          - **Target Android**: API 34 (Android 14)
+          - **Architecture Support**: ARM64, ARMv7, x86_64
+          
+          ### 🐛 Bug Reports
+          Found an issue? Please report it on our [GitHub Issues](https://github.com/${{ github.repository }}/issues) page.
+          
+          ### 🌍 Translations
+          Help us translate SafeEats into your language! Check out our [translation guide](https://github.com/${{ github.repository }}/blob/l10n/CONTRIBUTING_TRANSLATIONS.md).
+
+    - name: Upload Universal APK
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/flutter-apk/safeeats-universal-release.apk
+        asset_name: safeeats-universal-release.apk
+        asset_content_type: application/vnd.android.package-archive
+
+    - name: Upload ARM64-v8a APK
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/flutter-apk/safeeats-arm64-v8a-release.apk
+        asset_name: safeeats-arm64-v8a-release.apk
+        asset_content_type: application/vnd.android.package-archive
+      continue-on-error: true
+
+    - name: Upload ARMv7a APK
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/flutter-apk/safeeats-armeabi-v7a-release.apk
+        asset_name: safeeats-armeabi-v7a-release.apk
+        asset_content_type: application/vnd.android.package-archive
+      continue-on-error: true
+
+    - name: Upload x86_64 APK
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/flutter-apk/safeeats-x86_64-release.apk
+        asset_name: safeeats-x86_64-release.apk
+        asset_content_type: application/vnd.android.package-archive
+      continue-on-error: true
+
+  build-ios:
+    runs-on: macos-latest
+    name: Build iOS and Add to Release
+    needs: build-and-release
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Generate localization files
+      run: flutter gen-l10n
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Install CocoaPods
+      run: |
+        cd ios
+        pod install
+        
+    - name: Build iOS (Release - unsigned)
+      run: flutter build ios --release --no-codesign
+      
+    - name: Create iOS IPA
+      run: |
+        cd build/ios/iphoneos/
+        mkdir -p Payload
+        cp -r Runner.app Payload/
+        zip -r safeeats-ios-release.ipa Payload/
+        
+    - name: Get release upload URL
+      id: get_release
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          TAG_NAME="${{ github.event.inputs.tag_name }}"
+        else
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+        fi
+        
+        RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG_NAME" | \
+          jq -r '.id')
+        
+        UPLOAD_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID" | \
+          jq -r '.upload_url')
+        
+        echo "upload_url=$UPLOAD_URL" >> $GITHUB_OUTPUT
+
+    - name: Upload iOS IPA
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.get_release.outputs.upload_url }}
+        asset_path: build/ios/iphoneos/safeeats-ios-release.ipa
+        asset_name: safeeats-ios-release.ipa
+        asset_content_type: application/octet-stream
