@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/product_service.dart';
 
@@ -73,7 +74,8 @@ class ScanHistoryService {
 
       return history;
     } catch (e) {
-      print('Error loading scan history: $e');
+      developer.log('Error loading scan history: $e',
+          name: 'ScanHistoryService');
       return [];
     }
   }
@@ -115,7 +117,8 @@ class ScanHistoryService {
 
       await prefs.setStringList(_historyKey, historyJson);
     } catch (e) {
-      print('Error saving scan to history: $e');
+      developer.log('Error saving scan to history: $e',
+          name: 'ScanHistoryService');
     }
   }
 
@@ -124,7 +127,8 @@ class ScanHistoryService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_historyKey);
     } catch (e) {
-      print('Error clearing scan history: $e');
+      developer.log('Error clearing scan history: $e',
+          name: 'ScanHistoryService');
     }
   }
 

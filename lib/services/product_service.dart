@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 
 class Product {
@@ -261,7 +262,7 @@ class ProductService {
 
       return null;
     } catch (e) {
-      print('Error fetching product: $e');
+      developer.log('Error fetching product: $e', name: 'ProductService');
       return null;
     }
   }
@@ -411,7 +412,7 @@ class ProductService {
       _allergensLastFetched = DateTime.now();
       return fallbackMap;
     } catch (e) {
-      print('Error fetching allergens: $e');
+      developer.log('Error fetching allergens: $e', name: 'ProductService');
 
       // Use cache if available, even if expired
       if (_cachedAllergensByCategory != null) {
@@ -580,7 +581,7 @@ class ProductService {
       _ingredientsLastFetched = DateTime.now();
       return commonMap;
     } catch (e) {
-      print('Error fetching ingredients: $e');
+      developer.log('Error fetching ingredients: $e', name: 'ProductService');
 
       // Use cache if available, even if expired
       if (_cachedIngredientsByCategory != null) {
@@ -625,7 +626,7 @@ class ProductService {
           .take(50)
           .toList();
     } catch (e) {
-      print('Error searching ingredients: $e');
+      developer.log('Error searching ingredients: $e', name: 'ProductService');
 
       // Search in local cache as fallback
       final allIngredients = await getAllIngredients();
