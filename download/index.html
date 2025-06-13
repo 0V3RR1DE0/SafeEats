@@ -11,64 +11,70 @@
   <style>
     .download-page {
       min-height: 100vh;
-      background: var(--surface);
-      padding: 120px 0 80px;
+      background: var(--surface-color);
+      padding: calc(64px + var(--spacing-3xl)) 0 var(--spacing-3xl);
     }
     
     .download-container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 var(--spacing-lg);
     }
     
     .download-header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: var(--spacing-3xl);
     }
     
     .download-title {
-      font-size: 2.5rem;
+      font-size: var(--font-size-4xl);
       font-weight: 700;
       color: var(--on-surface);
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing-md);
     }
     
     .download-subtitle {
       color: var(--on-surface-variant);
-      font-size: 1.125rem;
-      margin-bottom: 2rem;
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--spacing-xl);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
     
     .platform-tabs {
       display: flex;
       justify-content: center;
-      gap: 1rem;
-      margin-bottom: 3rem;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-3xl);
     }
     
     .tab-btn {
-      padding: 0.75rem 1.5rem;
+      padding: var(--spacing-md) var(--spacing-xl);
       border: 2px solid var(--outline);
       background: transparent;
       color: var(--on-surface-variant);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: var(--transition-normal);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--spacing-sm);
       font-weight: 500;
+      font-family: var(--font-family);
     }
     
     .tab-btn.active {
-      border-color: var(--primary);
-      background: var(--primary);
-      color: var(--on-primary);
+      border-color: var(--primary-color);
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.25);
     }
     
     .tab-btn:hover:not(.active) {
-      border-color: var(--primary);
-      color: var(--primary);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background: rgba(46, 125, 50, 0.08);
     }
     
     .platform-content {
@@ -81,44 +87,46 @@
     
     .download-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
     }
     
     .download-card {
-      background: var(--surface-container);
-      border-radius: 12px;
-      padding: 1.5rem;
-      border: 1px solid var(--outline-variant);
-      transition: all 0.2s;
+      background: var(--background-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      border: 1px solid rgba(121, 116, 126, 0.12);
+      transition: var(--transition-normal);
+      box-shadow: 0 2px 16px var(--shadow);
     }
     
     .download-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
+      border-color: var(--primary-color);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px var(--shadow-elevated);
     }
     
     .card-header {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
     }
     
     .card-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--primary-container);
-      border-radius: 8px;
+      width: 56px;
+      height: 56px;
+      background: rgba(46, 125, 50, 0.1);
+      border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--on-primary-container);
+      color: var(--primary-color);
     }
     
     .card-title {
-      font-size: 1.25rem;
+      font-size: var(--font-size-xl);
       font-weight: 600;
       color: var(--on-surface);
       margin: 0;
@@ -126,142 +134,179 @@
     
     .card-subtitle {
       color: var(--on-surface-variant);
-      font-size: 0.875rem;
+      font-size: var(--font-size-sm);
       margin: 0;
     }
     
     .card-description {
       color: var(--on-surface-variant);
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.6;
     }
     
     .download-btn {
       width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--primary);
-      color: var(--on-primary);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: var(--primary-color);
+      color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: var(--transition-normal);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: var(--spacing-sm);
       text-decoration: none;
+      font-family: var(--font-family);
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.25);
     }
     
     .download-btn:hover {
-      background: var(--primary-container);
-      color: var(--on-primary-container);
+      background: #1B5E20;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.35);
     }
     
     .download-btn:disabled {
-      background: var(--surface-variant);
+      background: var(--outline);
       color: var(--on-surface-variant);
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
     
     .status-message {
       text-align: center;
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: 8px;
+      padding: var(--spacing-md);
+      margin: var(--spacing-xl) 0;
+      border-radius: var(--radius-md);
       display: none;
     }
     
     .status-loading {
-      background: var(--primary-container);
-      color: var(--on-primary-container);
+      background: rgba(46, 125, 50, 0.1);
+      color: var(--primary-color);
+      border: 1px solid rgba(46, 125, 50, 0.2);
     }
     
     .status-error {
-      background: var(--error-container);
-      color: var(--on-error-container);
+      background: rgba(211, 47, 47, 0.1);
+      color: #D32F2F;
+      border: 1px solid rgba(211, 47, 47, 0.2);
     }
     
     .status-success {
-      background: var(--tertiary-container);
-      color: var(--on-tertiary-container);
+      background: rgba(46, 125, 50, 0.1);
+      color: var(--primary-color);
+      border: 1px solid rgba(46, 125, 50, 0.2);
     }
     
     .installation-guide {
-      background: var(--surface-container);
-      border-radius: 12px;
-      padding: 2rem;
-      margin-top: 3rem;
+      background: var(--background-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      margin-top: var(--spacing-3xl);
+      box-shadow: 0 2px 16px var(--shadow);
     }
     
     .guide-title {
-      font-size: 1.5rem;
+      font-size: var(--font-size-2xl);
       font-weight: 600;
       color: var(--on-surface);
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing-lg);
     }
     
     .guide-steps {
       display: grid;
-      gap: 1rem;
+      gap: var(--spacing-lg);
     }
     
     .guide-step {
       display: flex;
-      gap: 1rem;
+      gap: var(--spacing-md);
       align-items: flex-start;
     }
     
     .step-number {
-      width: 32px;
-      height: 32px;
-      background: var(--primary);
-      color: var(--on-primary);
+      width: 40px;
+      height: 40px;
+      background: var(--primary-color);
+      color: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
       flex-shrink: 0;
+      font-size: var(--font-size-lg);
     }
     
     .step-content h4 {
-      margin: 0 0 0.5rem 0;
+      margin: 0 0 var(--spacing-sm) 0;
       color: var(--on-surface);
+      font-size: var(--font-size-lg);
+      font-weight: 600;
     }
     
     .step-content p {
       margin: 0;
       color: var(--on-surface-variant);
-      line-height: 1.5;
+      line-height: 1.6;
     }
     
     .back-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--spacing-sm);
       color: var(--on-surface-variant);
       text-decoration: none;
-      margin-top: 2rem;
-      transition: color 0.2s;
+      margin-top: var(--spacing-xl);
+      transition: var(--transition-fast);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-md);
     }
     
     .back-link:hover {
-      color: var(--primary);
+      color: var(--primary-color);
+      background: rgba(46, 125, 50, 0.08);
+    }
+    
+    .app-preview {
+      text-align: center;
+      margin: var(--spacing-xl) 0;
+    }
+    
+    .app-screenshot {
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(121, 116, 126, 0.12);
+    }
+    
+    .preview-caption {
+      margin-top: var(--spacing-md);
+      color: var(--on-surface-variant);
+      font-size: var(--font-size-sm);
+      font-style: italic;
     }
     
     @media (max-width: 768px) {
       .download-page {
-        padding: 100px 0 60px;
+        padding: calc(64px + var(--spacing-xl)) 0 var(--spacing-xl);
       }
       
       .download-title {
-        font-size: 2rem;
+        font-size: var(--font-size-3xl);
       }
       
       .platform-tabs {
         flex-direction: column;
         align-items: center;
+        gap: var(--spacing-sm);
       }
       
       .download-grid {
@@ -269,7 +314,34 @@
       }
       
       .installation-guide {
-        padding: 1.5rem;
+        padding: var(--spacing-lg);
+      }
+      
+      .download-container {
+        padding: 0 var(--spacing-md);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .download-title {
+        font-size: var(--font-size-2xl);
+      }
+      
+      .tab-btn {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: var(--font-size-sm);
+      }
+      
+      .card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+      }
+      
+      .guide-step {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
       }
     }
   </style>
@@ -280,6 +352,11 @@
       <div class="download-header">
         <h1 class="download-title">Download SafeEats</h1>
         <p class="download-subtitle">Choose your platform and architecture for the best experience</p>
+        
+        <div class="app-preview">
+          <img src="../images/safeeats_home.png" alt="SafeEats App Screenshot" class="app-screenshot">
+          <p class="preview-caption">SafeEats home screen - Tap to scan products and manage dietary restrictions</p>
+        </div>
         
         <div class="platform-tabs">
           <button class="tab-btn active" data-platform="android">
