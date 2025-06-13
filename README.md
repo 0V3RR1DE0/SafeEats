@@ -37,7 +37,7 @@ SafeEats is a powerful mobile application designed to help people with food alle
 3. **Install**: Open the downloaded file and tap Install
 
 ### iOS
-iOS version is available! Check the [releases page](https://github.com/0V3RR1DE0/SafeEats/releases) for the latest iOS build.
+iOS IPA available for sideloading. Check the [releases page](https://github.com/0V3RR1DE0/SafeEats/releases). Coming to F-Droid and IzzyOnDroid soon!
 
 ## 🌐 Website
 
@@ -46,7 +46,7 @@ Visit our website at [eats.netique.lol](https://eats.netique.lol) for more infor
 ## 📊 Statistics
 
 - **50K+** Products in Database
-- **v1.0.0-beta** Current Version
+- **v1.0.0-beta+1** Current Version
 - **~31MB** App Size
 - **2** Languages Supported (English, Finnish)
 
