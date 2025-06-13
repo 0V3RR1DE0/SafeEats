@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloading SafeEats APK...</title>
+  <meta name="description" content="Automatically downloading the latest SafeEats APK for Android">
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    .download-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      padding: 2rem;
+    }
+    
+    .download-container {
+      text-align: center;
+      max-width: 500px;
+      background: var(--surface-container);
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .download-icon {
+      font-size: 4rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .download-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      margin-bottom: 1rem;
+    }
+    
+    .download-status {
+      color: var(--on-surface-variant);
+      margin-bottom: 2rem;
+    }
+    
+    .manual-download {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--outline-variant);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: var(--on-primary);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .btn:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    
+    .error-message {
+      color: var(--error);
+      margin-top: 1rem;
+    }
+  </style>
+  <script>
+    let downloadStarted = false;
+    
+    function updateStatus(message) {
+      document.getElementById('status').textContent = message;
+    }
+    
+    function showError(message) {
+      document.getElementById('error').textContent = message;
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('manual-download').style.display = 'block';
+    }
+    
+    function startDownload() {
+      if (downloadStarted) return;
+      downloadStarted = true;
+      
+      updateStatus('Fetching latest release information...');
+      
+      fetch("https://api.github.com/repos/0V3RR1DE0/SafeEats/releases/latest")
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch release data');
+          return res.json();
+        })
+        .then(data => {
+          updateStatus('Looking for APK file...');
+          
+          // Look for the universal APK
+          const asset = data.assets.find(a => 
+            a.name === "safeeats-universal-release.apk" || 
+            a.name.includes("universal") || 
+            a.name.includes("release.apk")
+          );
+          
+          if (asset) {
+            updateStatus('Starting download...');
+            
+            // Track download
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'download', {
+                'event_category': 'engagement',
+                'event_label': 'auto-redirect',
+                'value': 1
+              });
+            }
+            
+            // Redirect to download
+            window.location.href = asset.browser_download_url;
+            
+            // Show success message after a delay
+            setTimeout(() => {
+              updateStatus('Download should have started! If not, use the manual download below.');
+              document.getElementById('manual-download').style.display = 'block';
+            }, 3000);
+            
+          } else {
+            throw new Error('APK file not found in latest release');
+          }
+        })
+        .catch(error => {
+          console.error('Download error:', error);
+          showError('Error: ' + error.message);
+        });
+    }
+    
+    // Start download when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      // Small delay to show the loading state
+      setTimeout(startDownload, 1000);
+    });
+  </script>
+</head>
+<body>
+  <div class="download-page">
+    <div class="download-container">
+      <div class="download-icon">
+        <span class="material-icons">download</span>
+      </div>
+      
+      <h1 class="download-title">Downloading SafeEats</h1>
+      
+      <p id="status" class="download-status">
+        Preparing download...
+      </p>
+      
+      <div id="error" class="error-message" style="display: none;"></div>
+      
+      <div id="manual-download" class="manual-download" style="display: none;">
+        <p>If the download didn't start automatically:</p>
+        <a href="https://github.com/0V3RR1DE0/SafeEats/releases/latest" class="btn">
+          <span class="material-icons">open_in_new</span>
+          Go to Releases Page
+        </a>
+      </div>
+      
+      <div style="margin-top: 2rem;">
+        <a href="../index.html" style="color: var(--on-surface-variant); text-decoration: none;">
+          ← Back to SafeEats Website
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
