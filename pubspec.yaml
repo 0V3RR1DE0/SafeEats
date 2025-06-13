@@ -1,6 +1,6 @@
 name: safeeats
 description: Food safety app using Material Design 3
-version: 1.0.0-beta+6
+version: 1.0.0-beta+8
 publish_to: 'none'
 
 environment:
