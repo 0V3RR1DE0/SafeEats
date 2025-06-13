@@ -206,7 +206,7 @@
                     
                     <div class="download-stats">
                         <div class="stat">
-                            <span class="stat-number">v1.0.0-beta</span>
+                            <span class="stat-number">v1.0.0-beta+2</span>
                             <span class="stat-label">Current Version</span>
                         </div>
                         <div class="stat">
@@ -217,6 +217,23 @@
                             <span class="stat-number">Android + iOS</span>
                             <span class="stat-label">Platforms</span>
                         </div>
+                    </div>
+                    
+                    <div class="github-badges">
+                        <div class="badge-container">
+                            <img src="https://img.shields.io/github/downloads/0V3RR1DE0/SafeEats/total?style=flat-square&logo=github&label=Total%20Downloads&color=2E7D32" alt="Total Downloads" class="github-badge">
+                        </div>
+                        <div class="badge-container">
+                            <img src="https://img.shields.io/github/stars/0V3RR1DE0/SafeEats?style=flat-square&logo=github&label=GitHub%20Stars&color=2E7D32" alt="GitHub Stars" class="github-badge">
+                        </div>
+                    </div>
+                    
+                    <div class="support-section">
+                        <button class="donation-btn" disabled title="Donations not yet available">
+                            <span class="material-icons">favorite</span>
+                            Support Development
+                        </button>
+                        <p class="donation-note">Donation options coming soon!</p>
                     </div>
                 </div>
                 
@@ -451,18 +468,6 @@
         
         // Initialize download counter on page load
         document.addEventListener('DOMContentLoaded', updateDownloadCounter);
-        
-        // Add download counter display element
-        document.addEventListener('DOMContentLoaded', function() {
-            const downloadSection = document.querySelector('.download-stats');
-            if (downloadSection) {
-                const counterDiv = document.createElement('div');
-                counterDiv.className = 'download-counter';
-                counterDiv.style.cssText = 'text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--on-surface-variant);';
-                downloadSection.appendChild(counterDiv);
-                updateDownloadCounter();
-            }
-        });
     </script>
 </body>
 </html>

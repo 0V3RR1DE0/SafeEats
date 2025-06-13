@@ -368,6 +368,73 @@ body {
     color: var(--on-surface-variant);
 }
 
+.github-badges {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) 0;
+    flex-wrap: wrap;
+}
+
+.badge-container {
+    display: flex;
+    align-items: center;
+}
+
+.github-badge {
+    height: 20px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.github-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.25);
+}
+
+.support-section {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+}
+
+.donation-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--outline);
+    color: var(--on-surface-variant);
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    cursor: not-allowed;
+    opacity: 0.6;
+    font-family: var(--font-family);
+    transition: var(--transition-normal);
+}
+
+.donation-btn:not(:disabled) {
+    background: #FF6B6B;
+    color: white;
+    cursor: pointer;
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.25);
+}
+
+.donation-btn:not(:disabled):hover {
+    background: #FF5252;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.35);
+}
+
+.donation-note {
+    font-size: var(--font-size-sm);
+    color: var(--on-surface-variant);
+    margin-top: var(--spacing-sm);
+    font-style: italic;
+}
+
 .download-buttons {
     display: flex;
     flex-direction: column;
