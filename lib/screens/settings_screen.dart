@@ -7,6 +7,13 @@ import 'package:url_launcher/url_launcher.dart';
 import '../services/language_service.dart';
 import '../services/theme_service.dart';
 
+class _VersionInfo {
+  final List<int> versionParts;
+  final int buildNumber;
+
+  _VersionInfo(this.versionParts, this.buildNumber);
+}
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -94,24 +101,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _isNewerVersion(String remoteVersion, String currentVersion) {
     try {
       // Parse versions like "1.0.0-beta+1" or "1.0.0"
-      final remoteParts = remoteVersion.split('-')[0].split('+')[0].split('.');
-      final currentParts =
-          currentVersion.split('-')[0].split('+')[0].split('.');
+      final remoteParsed = _parseVersionString(remoteVersion);
+      final currentParsed = _parseVersionString(currentVersion);
 
+      // Compare major.minor.patch first
       for (int i = 0; i < 3; i++) {
-        final remote =
-            int.tryParse(remoteParts.length > i ? remoteParts[i] : '0') ?? 0;
-        final current =
-            int.tryParse(currentParts.length > i ? currentParts[i] : '0') ?? 0;
-
-        if (remote > current) return true;
-        if (remote < current) return false;
+        if (remoteParsed.versionParts[i] > currentParsed.versionParts[i])
+          return true;
+        if (remoteParsed.versionParts[i] < currentParsed.versionParts[i])
+          return false;
       }
 
-      return false; // Versions are equal
+      // If versions are equal, compare build numbers
+      return remoteParsed.buildNumber > currentParsed.buildNumber;
     } catch (e) {
       return false; // Error parsing versions
     }
+  }
+
+  _VersionInfo _parseVersionString(String version) {
+    // Remove 'v' prefix if present
+    final cleanVersion = version.replaceAll('v', '');
+
+    // Split by '+' to separate build number
+    final parts = cleanVersion.split('+');
+    final versionPart = parts[0];
+    final buildNumber = parts.length > 1 ? int.tryParse(parts[1]) ?? 0 : 0;
+
+    // Split version part by '-' to remove pre-release suffix
+    final versionOnly = versionPart.split('-')[0];
+
+    // Parse major.minor.patch
+    final versionParts = versionOnly.split('.');
+    final major =
+        int.tryParse(versionParts.length > 0 ? versionParts[0] : '0') ?? 0;
+    final minor =
+        int.tryParse(versionParts.length > 1 ? versionParts[1] : '0') ?? 0;
+    final patch =
+        int.tryParse(versionParts.length > 2 ? versionParts[2] : '0') ?? 0;
+
+    return _VersionInfo([major, minor, patch], buildNumber);
   }
 
   Future<void> _loadLanguageSettings() async {
