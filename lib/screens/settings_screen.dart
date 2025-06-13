@@ -94,10 +94,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     try {
       // Parse versions like "1.0.0-beta+1" or "1.0.0"
       final remoteParts = remoteVersion.split('-')[0].split('+')[0].split('.');
-      final currentParts = currentVersion
-          .split('-')[0]
-          .split('+')[0]
-          .split('.');
+      final currentParts =
+          currentVersion.split('-')[0].split('+')[0].split('.');
 
       for (int i = 0; i < 3; i++) {
         final remote =
@@ -145,16 +143,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   String _getLanguageDisplayName(Locale locale, AppLocalizations l10n) {
-    switch (locale.languageCode) {
-      case 'en':
-        return 'English';
-      case 'fi':
-        return 'Suomi';
-      case 'es':
-        return 'Español';
-      default:
-        return locale.languageCode.toUpperCase();
-    }
+    final languageService = LanguageService();
+    return languageService.getLanguageDisplayName(locale);
   }
 
   String _getThemeModeDisplayName(ThemeMode themeMode, AppLocalizations l10n) {
@@ -216,36 +206,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.web),
             title: Text(l10n.visitWebsite),
-            subtitle: const Text('https://safeeats.app'),
-            onTap: () => _launchUrl('https://safeeats.app'),
+            subtitle: const Text('https://eats.netique.lol'),
+            onTap: () => _launchUrl('https://eats.netique.lol'),
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            title: const Text('Support Development'),
+            subtitle: const Text('Donation options coming soon!'),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () => _showDonationDialog(),
           ),
 
           // Version Section
           ListTile(
             leading: const Icon(Icons.system_update),
             title: Text(l10n.version(_version)),
-            subtitle:
-                _checkingForUpdates
-                    ? Text(l10n.checkingForUpdates)
-                    : _updateAvailable
+            subtitle: _checkingForUpdates
+                ? Text(l10n.checkingForUpdates)
+                : _updateAvailable
                     ? Text(l10n.updateAvailable(_latestVersion ?? ''))
                     : Text(l10n.upToDate),
-            trailing:
-                _updateAvailable
-                    ? TextButton(
-                      onPressed: () => _showUpdateDialog(),
-                      child: Text(l10n.update),
-                    )
-                    : _checkingForUpdates
+            trailing: _updateAvailable
+                ? TextButton(
+                    onPressed: () => _showUpdateDialog(),
+                    child: Text(l10n.update),
+                  )
+                : _checkingForUpdates
                     ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: _checkForUpdates,
-                    ),
+                        icon: const Icon(Icons.refresh),
+                        onPressed: _checkForUpdates,
+                      ),
           ),
         ],
       ),
@@ -257,41 +253,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(l10n.language),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RadioListTile<Locale?>(
-                  title: Text(l10n.systemDefault),
-                  value: null,
-                  groupValue: _currentLocale,
-                  onChanged: (value) {
-                    Navigator.of(context).pop();
-                    _changeLanguage(value);
-                  },
-                ),
-                ..._supportedLocales.map(
-                  (locale) => RadioListTile<Locale?>(
-                    title: Text(_getLanguageDisplayName(locale, l10n)),
-                    value: locale,
-                    groupValue: _currentLocale,
-                    onChanged: (value) {
-                      Navigator.of(context).pop();
-                      _changeLanguage(value);
-                    },
-                  ),
-                ),
-              ],
+      builder: (context) => AlertDialog(
+        title: Text(l10n.language),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<Locale?>(
+              title: Text(l10n.systemDefault),
+              value: null,
+              groupValue: _currentLocale,
+              onChanged: (value) {
+                Navigator.of(context).pop();
+                _changeLanguage(value);
+              },
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l10n.cancel),
+            ..._supportedLocales.map(
+              (locale) => RadioListTile<Locale?>(
+                title: Text(_getLanguageDisplayName(locale, l10n)),
+                value: locale,
+                groupValue: _currentLocale,
+                onChanged: (value) {
+                  Navigator.of(context).pop();
+                  _changeLanguage(value);
+                },
               ),
-            ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
           ),
+        ],
+      ),
     );
   }
 
@@ -301,48 +296,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(l10n.themeMode),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RadioListTile<ThemeMode>(
-                  title: Text(l10n.systemTheme),
-                  value: ThemeMode.system,
-                  groupValue: currentThemeMode,
-                  onChanged: (value) {
-                    Navigator.of(context).pop();
-                    if (value != null) _changeThemeMode(value);
-                  },
-                ),
-                RadioListTile<ThemeMode>(
-                  title: Text(l10n.lightTheme),
-                  value: ThemeMode.light,
-                  groupValue: currentThemeMode,
-                  onChanged: (value) {
-                    Navigator.of(context).pop();
-                    if (value != null) _changeThemeMode(value);
-                  },
-                ),
-                RadioListTile<ThemeMode>(
-                  title: Text(l10n.darkTheme),
-                  value: ThemeMode.dark,
-                  groupValue: currentThemeMode,
-                  onChanged: (value) {
-                    Navigator.of(context).pop();
-                    if (value != null) _changeThemeMode(value);
-                  },
-                ),
-              ],
+      builder: (context) => AlertDialog(
+        title: Text(l10n.themeMode),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<ThemeMode>(
+              title: Text(l10n.systemTheme),
+              value: ThemeMode.system,
+              groupValue: currentThemeMode,
+              onChanged: (value) {
+                Navigator.of(context).pop();
+                if (value != null) _changeThemeMode(value);
+              },
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l10n.cancel),
-              ),
-            ],
+            RadioListTile<ThemeMode>(
+              title: Text(l10n.lightTheme),
+              value: ThemeMode.light,
+              groupValue: currentThemeMode,
+              onChanged: (value) {
+                Navigator.of(context).pop();
+                if (value != null) _changeThemeMode(value);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: Text(l10n.darkTheme),
+              value: ThemeMode.dark,
+              groupValue: currentThemeMode,
+              onChanged: (value) {
+                Navigator.of(context).pop();
+                if (value != null) _changeThemeMode(value);
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
           ),
+        ],
+      ),
     );
   }
 
@@ -351,35 +345,72 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(l10n.newVersionAvailable(_latestVersion ?? '')),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (_updateNotes != null) ...[
-                  Text(_updateNotes!),
-                  const SizedBox(height: 16),
-                ],
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l10n.later),
-              ),
-              FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  if (_updateUrl != null) {
-                    _launchUrl(_updateUrl!);
-                  }
-                },
-                child: Text(l10n.updateNow),
-              ),
+      builder: (context) => AlertDialog(
+        title: Text(l10n.newVersionAvailable(_latestVersion ?? '')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_updateNotes != null) ...[
+              Text(_updateNotes!),
+              const SizedBox(height: 16),
             ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.later),
           ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (_updateUrl != null) {
+                _launchUrl(_updateUrl!);
+              }
+            },
+            child: Text(l10n.updateNow),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDonationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Support Development'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Thank you for considering supporting SafeEats development!'),
+            SizedBox(height: 16),
+            Text(
+                'Donation options are coming soon. We\'re working on setting up various ways for you to support the project.'),
+            SizedBox(height: 16),
+            Text('In the meantime, you can help by:'),
+            SizedBox(height: 8),
+            Text('• Starring the project on GitHub'),
+            Text('• Sharing SafeEats with friends'),
+            Text('• Reporting bugs and suggesting features'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _launchUrl('https://github.com/0V3RR1DE0/SafeEats');
+            },
+            child: const Text('Visit GitHub'),
+          ),
+        ],
+      ),
     );
   }
 }
